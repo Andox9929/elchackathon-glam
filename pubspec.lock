@@ -460,13 +460,13 @@ packages:
     source: hosted
     version: "1.0.1"
   modal_bottom_sheet:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: modal_bottom_sheet
-      sha256: "24072fb73bf3c9a5558e9989d3cee45bb10bd6fac5f8b45a1b20394b9a06713e"
+      sha256: ef533916a2c3089571c32bd34e410faca77a6849a3f28f748e0794525c5658a0
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.2"
   numberpicker:
     dependency: "direct main"
     description:
@@ -714,4 +714,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.18.0 <3.0.0"
-  flutter: ">=1.24.0-7.0"
+  flutter: ">=3.0.0"
