@@ -34,6 +34,12 @@ dependencies:
   numberpicker: ^2.1.1
   flare_splash_screen: ^4.0.0
   flutter_svg: ^0.23.0+1
+  modal_bottom_sheet: ^2.0.0
+  # modal_bottom_sheet:
+  #   git:
+  #     url: https://github.com/followthemoney1/modal_bottom_sheet.git
+  #     ref: main
+  #     path: modal_bottom_sheet
 
 
 dev_dependencies:
