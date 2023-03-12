@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'components/custom_bottom_bar.dart';
 import 'components/product_list.dart';
 import 'components/tab_view.dart';
+import 'package:alan_voice/alan_voice.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -42,6 +43,35 @@ class _MainPageState extends State<MainPage>
     with TickerProviderStateMixin<MainPage> {
   late TabController tabController;
   late TabController bottomTabController;
+
+  _MainPageState() {
+    void _handleCommand(Map<String, dynamic> command) {
+      print('Start handle Command');
+      switch (command["command"]) {
+        case "navigation":
+          switch (command["route"]) {
+            case "/home":
+              bottomTabController.animateTo(0);
+              break;
+            case "/cart":
+              bottomTabController.animateTo(2);
+              break;
+          }
+          break;
+      }
+    }
+
+    /// Init Alan Button with project key from Alan Studio
+    AlanVoice.addButton(
+        "7e8c76af5acb0245cbf3c098c789d13a2e956eca572e1d8b807a3e2338fdd0dc/stage",
+        buttonAlign: AlanVoice.BUTTON_ALIGN_LEFT);
+
+    /// Handle commands from Alan Studio
+    AlanVoice.onCommand.add((command) {
+      debugPrint("got new command ${command.toString()}");
+      _handleCommand(command.data);
+    });
+  }
 
   @override
   void initState() {

@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  alan_voice:
+    dependency: "direct main"
+    description:
+      name: alan_voice
+      sha256: "0ba7135886092c490eabda40c2176e5a2bad02ca1b3f463a3e10f3b4f7cabf38"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.11.0"
   analyzer:
     dependency: transitive
     description:
@@ -480,6 +488,14 @@ packages:
     description:
       name: package_config
       sha256: a4d5ede5ca9c3d88a2fef1147a078570c861714c806485c596b109819135bc12
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
+  package_info:
+    dependency: transitive
+    description:
+      name: package_info
+      sha256: "6c07d9d82c69e16afeeeeb6866fe43985a20b3b50df243091bfc4a4ad2b03b75"
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"

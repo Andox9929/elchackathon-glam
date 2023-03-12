@@ -1,8 +1,6 @@
-
 import 'package:ecommerce_int2/screens/splash_page.dart';
 import 'package:flutter/material.dart';
-
-
+import 'package:alan_voice/alan_voice.dart';
 
 void main() => runApp(MyApp());
 
