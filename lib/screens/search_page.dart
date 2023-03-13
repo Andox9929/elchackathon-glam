@@ -6,6 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rubber/rubber.dart';
 
 class SearchPage extends StatefulWidget {
+  final String? search;
+
+  SearchPage({this.search});
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -71,6 +74,7 @@ class _SearchPageState extends State<SearchPage>
         upperBoundValue: AnimationControllerValue(percentage: 0.4),
         lowerBoundValue: AnimationControllerValue(pixel: 50),
         duration: Duration(milliseconds: 200));
+    searchController.text = widget.search!;
     super.initState();
   }
 

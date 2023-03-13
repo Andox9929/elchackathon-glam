@@ -20,7 +20,6 @@ class MainPage extends StatefulWidget {
 
 List<String> timelines = ['Weekly featured', 'Best of June', 'Best of 2018'];
 String selectedTimeline = 'Weekly featured';
-
 List<Product> products = [
   Product(
       'assets/headphones_2.png',
@@ -55,6 +54,14 @@ class _MainPageState extends State<MainPage>
               break;
             case "/cart":
               bottomTabController.animateTo(2);
+              break;
+            case "/search":
+              String searchText = command["data"];
+              print("This is $searchText");
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => SearchPage(
+                        search: searchText,
+                      )));
               break;
           }
           break;
