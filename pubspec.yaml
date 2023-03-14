@@ -40,7 +40,8 @@ dependencies:
   #     url: https://github.com/followthemoney1/modal_bottom_sheet.git
   #     ref: main
   #     path: modal_bottom_sheet
-
+  google_ml_kit: ^0.6.0
+  image_picker: ^0.8.1+1
 
 dev_dependencies:
   flutter_test:

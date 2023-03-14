@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/product/components/color_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
+import 'package:image_picker/image_picker.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
+import 'dart:async';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -46,6 +50,59 @@ class _PaymentPageState extends State<PaymentPage> {
       return '';
   }
 
+  Future<void> _scanCard() async {
+    print("===================================");
+  }
+
+  late String result;
+  File? _image;
+  InputImage? inputImage;
+  final picker = ImagePicker();
+
+  final _textDetector = GoogleMlKit.vision.textDetector();
+
+  Future pickImageFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        inputImage = InputImage.fromFilePath(pickedFile.path);
+        _readTextFromImage(inputImage as File);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future captureImageFromCamera() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        inputImage = InputImage.fromFilePath(pickedFile.path);
+        _readTextFromImage(inputImage as File);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<void> _readTextFromImage(File image) async {
+    final inputImage = InputImage.fromFile(image);
+
+    try {
+      final recognizedText = await _textDetector.processImage(inputImage);
+      setState(() {
+        print(recognizedText.text);
+        // _recognizedText = recognizedText.text;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget addThisCard = InkWell(
@@ -66,6 +123,32 @@ class _PaymentPageState extends State<PaymentPage> {
             borderRadius: BorderRadius.circular(9.0)),
         child: Center(
           child: Text("Add This Card",
+              style: const TextStyle(
+                  color: const Color(0xfffefefe),
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 20.0)),
+        ),
+      ),
+    );
+
+    Widget scanThisCard = InkWell(
+      onTap: pickImageFromGallery,
+      child: Container(
+        height: 80,
+        width: MediaQuery.of(context).size.width / 1.5,
+        decoration: BoxDecoration(
+            gradient: mainButton,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.16),
+                offset: Offset(0, 5),
+                blurRadius: 10.0,
+              )
+            ],
+            borderRadius: BorderRadius.circular(9.0)),
+        child: Center(
+          child: Text("Scan This Card",
               style: const TextStyle(
                   color: const Color(0xfffefefe),
                   fontWeight: FontWeight.w600,
@@ -320,6 +403,11 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: Padding(
                       padding: EdgeInsets.only(bottom: 20),
                       child: addThisCard,
+                    )),
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: scanThisCard,
                     ))
                   ],
                 ),
