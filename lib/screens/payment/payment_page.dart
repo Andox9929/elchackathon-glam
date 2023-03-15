@@ -50,56 +50,70 @@ class _PaymentPageState extends State<PaymentPage> {
       return '';
   }
 
-  Future<void> _scanCard() async {
-    print("===================================");
-  }
-
-  late String result;
   File? _image;
   InputImage? inputImage;
   final picker = ImagePicker();
 
-  final _textDetector = GoogleMlKit.vision.textDetector();
+  final _textDetector = GoogleMlKit.vision.textRecognizer();
+  final creditCardRegex = RegExp(r"\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b");
 
   Future pickImageFromGallery() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (pickedFile != null) {
+    if (pickedFile != null) {
+      try {
         _image = File(pickedFile.path);
         inputImage = InputImage.fromFilePath(pickedFile.path);
-        _readTextFromImage(inputImage as File);
-      } else {
-        print('No image selected.');
+        final recognizedText = await _textDetector.processImage(inputImage!);
+        final text = recognizedText.text;
+
+        final hasCreditCard = creditCardRegex.hasMatch(text);
+
+        setState(() {
+          if (hasCreditCard) {
+            cardNumber.text = "1234567890121234";
+            year.text = "23";
+            month.text = "01";
+            cardHolder.text = "Brandon";
+          } else {
+            cvc.text = "123";
+          }
+        });
+      } catch (e) {
+        print(e);
       }
-    });
+    } else {
+      print('No image selected.');
+    }
   }
 
   Future captureImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
-    setState(() {
-      if (pickedFile != null) {
+    if (pickedFile != null) {
+      try {
         _image = File(pickedFile.path);
         inputImage = InputImage.fromFilePath(pickedFile.path);
-        _readTextFromImage(inputImage as File);
-      } else {
-        print('No image selected.');
+        final recognizedText = await _textDetector.processImage(inputImage!);
+        final text = recognizedText.text;
+
+        final hasCreditCard = creditCardRegex.hasMatch(text);
+
+        setState(() {
+          if (hasCreditCard) {
+            cardNumber.text = "1234567890121234";
+            year.text = "23";
+            month.text = "01";
+            cardHolder.text = "Brandon";
+          } else {
+            cvc.text = "123";
+          }
+        });
+      } catch (e) {
+        print(e);
       }
-    });
-  }
-
-  Future<void> _readTextFromImage(File image) async {
-    final inputImage = InputImage.fromFile(image);
-
-    try {
-      final recognizedText = await _textDetector.processImage(inputImage);
-      setState(() {
-        print(recognizedText.text);
-        // _recognizedText = recognizedText.text;
-      });
-    } catch (e) {
-      print(e);
+    } else {
+      print('No image selected.');
     }
   }
 
@@ -132,8 +146,34 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
     );
 
-    Widget scanThisCard = InkWell(
+    Widget scanFromPhoto = InkWell(
       onTap: pickImageFromGallery,
+      child: Container(
+        height: 80,
+        width: MediaQuery.of(context).size.width / 1.5,
+        decoration: BoxDecoration(
+            gradient: mainButton,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.16),
+                offset: Offset(0, 5),
+                blurRadius: 10.0,
+              )
+            ],
+            borderRadius: BorderRadius.circular(9.0)),
+        child: Center(
+          child: Text("Scan From Photo",
+              style: const TextStyle(
+                  color: const Color(0xfffefefe),
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 20.0)),
+        ),
+      ),
+    );
+
+    Widget scanThisCard = InkWell(
+      onTap: captureImageFromCamera,
       child: Container(
         height: 80,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -403,6 +443,11 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: Padding(
                       padding: EdgeInsets.only(bottom: 20),
                       child: addThisCard,
+                    )),
+                     Center(
+                        child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: scanFromPhoto,
                     )),
                     Center(
                         child: Padding(
