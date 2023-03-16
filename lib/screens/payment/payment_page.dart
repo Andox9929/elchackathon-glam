@@ -127,10 +127,6 @@ class _PaymentPageState extends State<PaymentPage> {
       await prefs.setString('month', month.text);
       await prefs.setString('cardHolder', cardHolder.text);
       await prefs.setString('cvc', cvc.text);
-       print("=====================");
-    print(prefs.getString('cardNumber'));
-    print("=====================");
-
     } catch (e) {
       print('Error saving data to SharedPreferences: $e');
     }
@@ -138,9 +134,6 @@ class _PaymentPageState extends State<PaymentPage> {
 
   Future<void> getCreditCardInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("=====================");
-    print(prefs.getString('cardNumber'));
-    print("=====================");
 
     cardNumber.text = prefs.getString('cardNumber') ?? '';
     year.text = prefs.getString('year') ?? '';
@@ -152,7 +145,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     Widget addThisCard = InkWell(
-      onTap: () => saveCreditCardInfo,
+      onTap: saveCreditCardInfo,
       child: Container(
         height: 80,
         width: MediaQuery.of(context).size.width / 1.5,
