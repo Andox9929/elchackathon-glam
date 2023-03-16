@@ -1,18 +1,8 @@
 
 import 'package:ecommerce_int2/screens/splash_page.dart';
 import 'package:flutter/material.dart';
-// Brandon
-// import 'package:hive/hive.dart';
-// import 'package:path_provider/path_provider.dart';
 
 
-// void main() async {
-//   final appDocumentDir = await getApplicationDocumentsDirectory();
-//   Hive.init(appDocumentDir.path);
-//   await Hive.openBox<String>("credit_card_box_name");
-
-//   runApp(MyApp());
-// }
 
 void main() => runApp(MyApp());
 
