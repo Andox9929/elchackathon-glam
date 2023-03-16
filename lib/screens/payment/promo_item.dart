@@ -131,10 +131,13 @@ class PromoItem extends StatelessWidget {
             top: 5,
             child: ShopProductDisplay(
               Product(
-                  'assets/headphones.png',
-                  'Boat roackerz 400 On-Ear Bluetooth Headphones',
-                  'description',
-                  45.3),
+                  'el_lipstick_red',
+                  'assets/el_lipstick_red.jpg',
+                  'Estee Lauder Lipstick Red',
+                  'A Red Lipstick from Estee Lauder',
+                  'Estee Lauder',
+                  'lipstick',
+                  30.00),
               onPressed: () {},
             ),
           ),

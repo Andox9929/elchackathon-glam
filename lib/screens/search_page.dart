@@ -1,4 +1,5 @@
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:ecommerce_int2/data/product_data.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/product/view_product_page.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rubber/rubber.dart';
 
 class SearchPage extends StatefulWidget {
+  final String? search;
+  final List<Product>? productList;
+
+  SearchPage({this.search = '', this.productList});
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -16,23 +21,7 @@ class _SearchPageState extends State<SearchPage>
   String selectedCategory = "";
   String selectedPrice = "";
 
-  List<Product> products = [
-    Product(
-        'assets/headphones_2.png',
-        'Skullcandy headset L325',
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-        102.99),
-    Product(
-        'assets/headphones_3.png',
-        'Skullcandy headset X25',
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-        55.99),
-    Product(
-        'assets/headphones.png',
-        'Blackzy PRO hedphones M003',
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-        152.99),
-  ];
+  List<Product> products = [];
 
   List<String> timeFilter = [
     'Brand',
@@ -71,6 +60,24 @@ class _SearchPageState extends State<SearchPage>
         upperBoundValue: AnimationControllerValue(percentage: 0.4),
         lowerBoundValue: AnimationControllerValue(pixel: 50),
         duration: Duration(milliseconds: 200));
+    searchController.text = widget.search ?? '';
+    // products = getProductsByCategory(widget.search!);
+    products = getProducts();
+    List<Product> tempList = [];
+    products.forEach((product) {
+      if (product.name.toLowerCase().contains(widget.search!)) {
+        tempList.add(product);
+      } else if (product.brand.toLowerCase().contains(widget.search!)) {
+        tempList.add(product);
+      } else if (product.category.toLowerCase().contains(widget.search!)) {
+        tempList.add(product);
+      }
+    });
+    searchResults.clear();
+    searchResults.addAll(tempList);
+    // setState(() {
+
+    // });
     super.initState();
   }
 
@@ -117,6 +124,10 @@ class _SearchPageState extends State<SearchPage>
                   List<Product> tempList = [];
                   products.forEach((product) {
                     if (product.name.toLowerCase().contains(value)) {
+                      tempList.add(product);
+                    } else if (product.brand.toLowerCase().contains(value)) {
+                      tempList.add(product);
+                    } else if (product.category.toLowerCase().contains(value)) {
                       tempList.add(product);
                     }
                   });

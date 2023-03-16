@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/custom_background.dart';
+import 'package:ecommerce_int2/main.dart';
 import 'package:ecommerce_int2/models/product.dart';
+import 'package:ecommerce_int2/screens/address/add_address_page.dart';
 import 'package:ecommerce_int2/screens/category/category_list_page.dart';
 import 'package:ecommerce_int2/screens/notifications_page.dart';
+import 'package:ecommerce_int2/screens/payment/payment_page.dart';
+import 'package:ecommerce_int2/screens/product/components/shop_bottomSheet.dart';
+import 'package:ecommerce_int2/screens/product/product_page.dart';
+import 'package:ecommerce_int2/screens/product/view_product_page.dart';
 import 'package:ecommerce_int2/screens/profile_page.dart';
 import 'package:ecommerce_int2/screens/search_page.dart';
 import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
@@ -11,6 +19,8 @@ import 'package:flutter_svg/svg.dart';
 import 'components/custom_bottom_bar.dart';
 import 'components/product_list.dart';
 import 'components/tab_view.dart';
+import 'package:alan_voice/alan_voice.dart';
+import '../../data/product_data.dart' as _productData;
 
 class MainPage extends StatefulWidget {
   @override
@@ -19,35 +29,135 @@ class MainPage extends StatefulWidget {
 
 List<String> timelines = ['Weekly featured', 'Best of June', 'Best of 2018'];
 String selectedTimeline = 'Weekly featured';
-
-List<Product> products = [
-  Product(
-      'assets/headphones_2.png',
-      'Skullcandy headset L325',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-      102.99),
-  Product(
-      'assets/headphones_3.png',
-      'Skullcandy headset X25',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-      55.99),
-  Product(
-      'assets/headphones.png',
-      'Blackzy PRO hedphones M003',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-      152.99),
-];
+List<Product> products = _productData.getProducts();
 
 class _MainPageState extends State<MainPage>
-    with TickerProviderStateMixin<MainPage> {
+    with TickerProviderStateMixin<MainPage>, RouteAware {
   late TabController tabController;
   late TabController bottomTabController;
+
+  _MainPageState() {
+    void _handleCommand(Map<String, dynamic> command) {
+      print('Start handle Command');
+
+      switch (command["command"]) {
+        case "navigation":
+          switch (command["route"]) {
+            case "/home":
+              bottomTabController.animateTo(0);
+              break;
+            case "/cart":
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => CheckOutPage(),
+                ),
+              );
+              // bottomTabController.animateTo(2);
+              break;
+            case "/search":
+              String searchText = command["data"];
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => SearchPage(
+                    search: searchText,
+                  ),
+                ),
+              );
+              break;
+            case "/product":
+              String searchText = command["data"];
+              Product selectedProduct = products
+                  .where((element) => element.name.toLowerCase() == searchText)
+                  .first;
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ViewProductPage(
+                    product: selectedProduct,
+                  ),
+                ),
+              );
+              break;
+            case "/checkout":
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => CheckOutPage(),
+                ),
+              );
+              break;
+            case "/addAddress":
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => AddAddressPage(),
+                ),
+              );
+              break;
+            case "/payment":
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PaymentPage(),
+                ),
+              );
+              break;
+          }
+          break;
+        case 'addToCart':
+          final GlobalKey<ScaffoldState> _scaffoldKey =
+              new GlobalKey<ScaffoldState>();
+          _scaffoldKey.currentState!.showBottomSheet((context) {
+            return ShopBottomSheet();
+          });
+          break;
+        case 'buyNow':
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => CheckOutPage(),
+            ),
+          );
+          break;
+      }
+    }
+
+    /// Init Alan Button with project key from Alan Studio
+    AlanVoice.addButton(
+      "7e8c76af5acb0245cbf3c098c789d13a2e956eca572e1d8b807a3e2338fdd0dc/stage",
+    );
+
+    /// Handle commands from Alan Studio
+    AlanVoice.onCommand.add((command) {
+      debugPrint("got new command ${command.toString()}");
+      _handleCommand(command.data);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("main"));
     tabController = TabController(length: 5, vsync: this);
     bottomTabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPush() {}
+
+  @override
+  void didPop() {}
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
   }
 
   @override
@@ -81,20 +191,29 @@ class _MainPageState extends State<MainPage>
                     selectedTimeline = timelines[0];
                     products = [
                       Product(
-                          'assets/headphones_2.png',
-                          'Skullcandy headset L325',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          102.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                       Product(
-                          'assets/headphones_3.png',
-                          'Skullcandy headset X25',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          55.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                       Product(
-                          'assets/headphones.png',
-                          'Blackzy PRO hedphones M003',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          152.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                     ];
                   });
                 },
@@ -113,20 +232,29 @@ class _MainPageState extends State<MainPage>
                     selectedTimeline = timelines[1];
                     products = [
                       Product(
-                          'assets/bag_5.png',
-                          'Skullcandy headset L325',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          102.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                       Product(
-                          'assets/bag_6.png',
-                          'Skullcandy headset X25',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          55.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                       Product(
-                          'assets/bag_3.png',
-                          'Blackzy PRO hedphones M003',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          152.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                     ];
                   });
                 },
@@ -144,20 +272,29 @@ class _MainPageState extends State<MainPage>
                     selectedTimeline = timelines[2];
                     products = [
                       Product(
-                          'assets/headphone_13.png',
-                          'Skullcandy headset L325',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          102.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                       Product(
-                          'assets/jeans_4.png',
-                          'Skullcandy headset X25',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          55.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                       Product(
-                          'assets/ring_7.png',
-                          'Blackzy PRO hedphones M003',
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
-                          152.99),
+                          'el_lipstick_red',
+                          'assets/el_lipstick_red.jpg',
+                          'Estee Lauder Lipstick Red',
+                          'A Red Lipstick from Estee Lauder',
+                          'Estee Lauder',
+                          'lipstick',
+                          30.00),
                     ];
                   });
                 },
@@ -171,7 +308,7 @@ class _MainPageState extends State<MainPage>
           ],
         ));
 
-    Widget tabBar = TabBar(
+    /* Widget tabBar = TabBar(
       tabs: [
         Tab(text: 'Trending'),
         Tab(text: 'Sports'),
@@ -187,8 +324,7 @@ class _MainPageState extends State<MainPage>
       unselectedLabelColor: Color.fromRGBO(0, 0, 0, 0.5),
       isScrollable: true,
       controller: tabController,
-    );
-
+    );*/
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
       body: CustomPaint(
@@ -214,9 +350,9 @@ class _MainPageState extends State<MainPage>
                         products: products,
                       ),
                     ),
-                    SliverToBoxAdapter(
-                      child: tabBar,
-                    )
+                    // SliverToBoxAdapter(
+                    //   child: tabBar,
+                    // )
                   ];
                 },
                 body: TabView(
