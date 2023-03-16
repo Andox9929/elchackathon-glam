@@ -7,7 +7,7 @@ import 'dart:math' as math;
 import 'package:image_picker/image_picker.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'dart:async';
-// import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -23,7 +23,6 @@ class _PaymentPageState extends State<PaymentPage> {
   TextEditingController cardHolder = TextEditingController();
 
   ScrollController scrollController = ScrollController();
-  // final creditCardBox = Hive.openBox<String>('creditCardBox');
 
   @override
   void initState() {
@@ -121,24 +120,33 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future<void> saveCreditCardInfo() async {
-    // final creditCardBox = Hive.box<String>("creditCardBox");
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('cardNumber', cardNumber.text);
+      await prefs.setString('year', year.text);
+      await prefs.setString('month', month.text);
+      await prefs.setString('cardHolder', cardHolder.text);
+      await prefs.setString('cvc', cvc.text);
+       print("=====================");
+    print(prefs.getString('cardNumber'));
+    print("=====================");
 
-    // await creditCardBox.put('cardNumber', cardNumber.text);
-    // await creditCardBox.put('year', year.text);
-    // await creditCardBox.put('month', month.text);
-    // await creditCardBox.put('cardHolder', cardHolder.text);
-    // await creditCardBox.put('cvc', cvc.text);
-
+    } catch (e) {
+      print('Error saving data to SharedPreferences: $e');
+    }
   }
 
   Future<void> getCreditCardInfo() async {
-    // final creditCardBox = Hive.box<String>("creditCardBox");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("=====================");
+    print(prefs.getString('cardNumber'));
+    print("=====================");
 
-    // cardNumber.text = creditCardBox.get('cardNumber') ?? '';
-    // year.text = creditCardBox.get('year') ?? '';
-    // month.text = creditCardBox.get('month') ?? '';
-    // cardHolder.text = creditCardBox.get('cardHolder') ?? '';
-    // cvc.text = creditCardBox.get('cvc') ?? '';
+    cardNumber.text = prefs.getString('cardNumber') ?? '';
+    year.text = prefs.getString('year') ?? '';
+    month.text = prefs.getString('month') ?? '';
+    cardHolder.text = prefs.getString('cardHolder') ?? '';
+    cvc.text = prefs.getString('cvc') ?? '';
   }
 
   @override
