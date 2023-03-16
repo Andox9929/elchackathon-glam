@@ -44,6 +44,9 @@ dependencies:
   #     path: modal_bottom_sheet
   google_ml_kit: ^0.11.0
   image_picker: ^0.8.1+1
+  # Brandon
+  # hive: ^2.2.3
+  # path_provider: ^2.0.13
 
 dev_dependencies:
   flutter_test:
