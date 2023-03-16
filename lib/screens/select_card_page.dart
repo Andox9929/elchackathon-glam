@@ -1,4 +1,5 @@
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:ecommerce_int2/screens/payment/payment_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -9,6 +10,34 @@ class SelectCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width / 1.2;
     double cardHeight = 200;
+
+    Widget finishButton = InkWell(
+      onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => PaymentPage())),
+      child: Container(
+        height: 80,
+        width: MediaQuery.of(context).size.width / 1.5,
+        decoration: BoxDecoration(
+            gradient: mainButton,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.16),
+                offset: Offset(0, 5),
+                blurRadius: 10.0,
+              )
+            ],
+            borderRadius: BorderRadius.circular(9.0)),
+        child: Center(
+          child: Text("Payment",
+              style: const TextStyle(
+                  color: const Color(0xfffefefe),
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 20.0)),
+        ),
+      ),
+    );
+
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -142,11 +171,10 @@ class SelectCardPage extends StatelessWidget {
                                       color: Colors.grey[50]),
                                   child: TextField(
                                     textAlign: TextAlign.center,
-                                    keyboardType:
-                                        TextInputType.number,
-                                      inputFormatters:[
-                                        LengthLimitingTextInputFormatter(3),
-                                      ],
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(3),
+                                    ],
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.zero,
                                         hintText: 'CVV',
@@ -181,7 +209,8 @@ class SelectCardPage extends StatelessWidget {
                                 ],
                               ),
                             ],
-                          )
+                          ),
+                          Center(child: finishButton),
                         ],
                       )),
                 )

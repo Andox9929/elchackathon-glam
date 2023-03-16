@@ -4,6 +4,8 @@ import 'package:alan_voice/alan_voice.dart';
 
 void main() => runApp(MyApp());
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "Montserrat",
       ),
       home: SplashScreen(),
+      navigatorObservers: [routeObserver],
     );
   }
 }
