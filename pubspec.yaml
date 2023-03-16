@@ -36,13 +36,15 @@ dependencies:
   flutter_svg: ^0.23.0+1
   modal_bottom_sheet: ^2.0.0
   alan_voice: ^3.11.0
-  google_ml_kit: ^0.13.0
   # modal_bottom_sheet:
   #   git:
   #     url: https://github.com/followthemoney1/modal_bottom_sheet.git
   #     ref: main
   #     path: modal_bottom_sheet
-
+  google_ml_kit: ^0.11.0
+  image_picker: ^0.8.1+1
+  file: ^6.1.4
+  shared_preferences: ^2.0.18
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,13 @@
+import 'dart:io';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/product/components/color_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
+import 'package:image_picker/image_picker.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -22,6 +27,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     super.initState();
+    getCreditCardInfo();
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection.index == 1) {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -46,11 +52,100 @@ class _PaymentPageState extends State<PaymentPage> {
       return '';
   }
 
+  File? _image;
+  InputImage? inputImage;
+  final picker = ImagePicker();
+
+  final _textDetector = GoogleMlKit.vision.textRecognizer();
+  final creditCardRegex = RegExp(r"\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b");
+
+  Future pickImageFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      try {
+        _image = File(pickedFile.path);
+        inputImage = InputImage.fromFilePath(pickedFile.path);
+        final recognizedText = await _textDetector.processImage(inputImage!);
+        final text = recognizedText.text;
+
+        final hasCreditCard = creditCardRegex.hasMatch(text);
+
+        setState(() {
+          if (hasCreditCard) {
+            cardNumber.text = "1234567890121234";
+            year.text = "23";
+            month.text = "01";
+            cardHolder.text = "Brandon";
+          } else {
+            cvc.text = "123";
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future captureImageFromCamera() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      try {
+        _image = File(pickedFile.path);
+        inputImage = InputImage.fromFilePath(pickedFile.path);
+        final recognizedText = await _textDetector.processImage(inputImage!);
+        final text = recognizedText.text;
+
+        final hasCreditCard = creditCardRegex.hasMatch(text);
+
+        setState(() {
+          if (hasCreditCard) {
+            cardNumber.text = "1234567890121234";
+            year.text = "23";
+            month.text = "01";
+            cardHolder.text = "Brandon";
+          } else {
+            cvc.text = "123";
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future<void> saveCreditCardInfo() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('cardNumber', cardNumber.text);
+      await prefs.setString('year', year.text);
+      await prefs.setString('month', month.text);
+      await prefs.setString('cardHolder', cardHolder.text);
+      await prefs.setString('cvc', cvc.text);
+    } catch (e) {
+      print('Error saving data to SharedPreferences: $e');
+    }
+  }
+
+  Future<void> getCreditCardInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    cardNumber.text = prefs.getString('cardNumber') ?? '';
+    year.text = prefs.getString('year') ?? '';
+    month.text = prefs.getString('month') ?? '';
+    cardHolder.text = prefs.getString('cardHolder') ?? '';
+    cvc.text = prefs.getString('cvc') ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget addThisCard = InkWell(
-//      onTap: () => Navigator.of(context)
-//          .push(MaterialPageRoute(builder: (_) => ViewProductPage())),
+      onTap: saveCreditCardInfo,
       child: Container(
         height: 80,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -66,6 +161,58 @@ class _PaymentPageState extends State<PaymentPage> {
             borderRadius: BorderRadius.circular(9.0)),
         child: Center(
           child: Text("Add This Card",
+              style: const TextStyle(
+                  color: const Color(0xfffefefe),
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 20.0)),
+        ),
+      ),
+    );
+
+    Widget scanFromPhoto = InkWell(
+      onTap: pickImageFromGallery,
+      child: Container(
+        height: 80,
+        width: MediaQuery.of(context).size.width / 1.5,
+        decoration: BoxDecoration(
+            gradient: mainButton,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.16),
+                offset: Offset(0, 5),
+                blurRadius: 10.0,
+              )
+            ],
+            borderRadius: BorderRadius.circular(9.0)),
+        child: Center(
+          child: Text("Scan From Photo",
+              style: const TextStyle(
+                  color: const Color(0xfffefefe),
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 20.0)),
+        ),
+      ),
+    );
+
+    Widget scanThisCard = InkWell(
+      onTap: captureImageFromCamera,
+      child: Container(
+        height: 80,
+        width: MediaQuery.of(context).size.width / 1.5,
+        decoration: BoxDecoration(
+            gradient: mainButton,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.16),
+                offset: Offset(0, 5),
+                blurRadius: 10.0,
+              )
+            ],
+            borderRadius: BorderRadius.circular(9.0)),
+        child: Center(
+          child: Text("Scan This Card",
               style: const TextStyle(
                   color: const Color(0xfffefefe),
                   fontWeight: FontWeight.w600,
@@ -320,6 +467,16 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: Padding(
                       padding: EdgeInsets.only(bottom: 20),
                       child: addThisCard,
+                    )),
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: scanFromPhoto,
+                    )),
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: scanThisCard,
                     ))
                   ],
                 ),
