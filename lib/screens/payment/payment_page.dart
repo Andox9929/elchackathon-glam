@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:image_picker/image_picker.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'dart:async';
+// import 'package:hive/hive.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -22,10 +23,12 @@ class _PaymentPageState extends State<PaymentPage> {
   TextEditingController cardHolder = TextEditingController();
 
   ScrollController scrollController = ScrollController();
+  // final creditCardBox = Hive.openBox<String>('creditCardBox');
 
   @override
   void initState() {
     super.initState();
+    getCreditCardInfo();
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection.index == 1) {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -117,11 +120,31 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
+  Future<void> saveCreditCardInfo() async {
+    // final creditCardBox = Hive.box<String>("creditCardBox");
+
+    // await creditCardBox.put('cardNumber', cardNumber.text);
+    // await creditCardBox.put('year', year.text);
+    // await creditCardBox.put('month', month.text);
+    // await creditCardBox.put('cardHolder', cardHolder.text);
+    // await creditCardBox.put('cvc', cvc.text);
+
+  }
+
+  Future<void> getCreditCardInfo() async {
+    // final creditCardBox = Hive.box<String>("creditCardBox");
+
+    // cardNumber.text = creditCardBox.get('cardNumber') ?? '';
+    // year.text = creditCardBox.get('year') ?? '';
+    // month.text = creditCardBox.get('month') ?? '';
+    // cardHolder.text = creditCardBox.get('cardHolder') ?? '';
+    // cvc.text = creditCardBox.get('cvc') ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget addThisCard = InkWell(
-//      onTap: () => Navigator.of(context)
-//          .push(MaterialPageRoute(builder: (_) => ViewProductPage())),
+      onTap: () => saveCreditCardInfo,
       child: Container(
         height: 80,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -444,7 +467,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       padding: EdgeInsets.only(bottom: 20),
                       child: addThisCard,
                     )),
-                     Center(
+                    Center(
                         child: Padding(
                       padding: EdgeInsets.only(bottom: 20),
                       child: scanFromPhoto,
