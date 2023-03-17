@@ -66,9 +66,12 @@ class _MainPageState extends State<MainPage>
               break;
             case "/product":
               String searchText = command["data"];
+              print("Output>>> haha $searchText");
               Product selectedProduct = products
-                  .where((element) => element.name.toLowerCase() == searchText)
+                  .where((element) =>
+                      element.id.toUpperCase() == searchText.toUpperCase())
                   .first;
+              print("Output>>> ${selectedProduct.name}");
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ViewProductPage(
@@ -117,6 +120,17 @@ class _MainPageState extends State<MainPage>
       }
     }
 
+    void _checkIsActive() async {
+      var isActive = await AlanVoice.isActive();
+      if (isActive) {
+        print("Output>>> IS ACTIVE");
+        // AlanVoice.showButton();
+      } else {
+        print("Output>>> IS NOT ACTIVE");
+        // AlanVoice.hideButton();
+      }
+    }
+
     /// Init Alan Button with project key from Alan Studio
     AlanVoice.addButton(
       "7e8c76af5acb0245cbf3c098c789d13a2e956eca572e1d8b807a3e2338fdd0dc/stage",
@@ -124,9 +138,16 @@ class _MainPageState extends State<MainPage>
 
     /// Handle commands from Alan Studio
     AlanVoice.onCommand.add((command) {
-      debugPrint("got new command ${command.toString()}");
+      debugPrint("Output>>> got new command ${command.toString()}");
       _handleCommand(command.data);
     });
+
+    AlanVoice.eventCallbacks.add((command) {
+      debugPrint("Output>>> eventCallbacks");
+      // _checkIsActive();
+    });
+
+    AlanVoice.activate();
   }
 
   @override
@@ -189,32 +210,7 @@ class _MainPageState extends State<MainPage>
                 onTap: () {
                   setState(() {
                     selectedTimeline = timelines[0];
-                    products = [
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                    ];
+                    products = _productData.getProducts();
                   });
                 },
                 child: Text(
@@ -230,32 +226,7 @@ class _MainPageState extends State<MainPage>
                 onTap: () {
                   setState(() {
                     selectedTimeline = timelines[1];
-                    products = [
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                    ];
+                    products = _productData.getProducts();
                   });
                 },
                 child: Text(timelines[1],
@@ -270,32 +241,7 @@ class _MainPageState extends State<MainPage>
                 onTap: () {
                   setState(() {
                     selectedTimeline = timelines[2];
-                    products = [
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                    ];
+                    products = _productData.getProducts();
                   });
                 },
                 child: Text(timelines[2],

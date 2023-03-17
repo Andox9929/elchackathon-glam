@@ -63,16 +63,7 @@ class _SearchPageState extends State<SearchPage>
     searchController.text = widget.search ?? '';
     // products = getProductsByCategory(widget.search!);
     products = getProducts();
-    List<Product> tempList = [];
-    products.forEach((product) {
-      if (product.name.toLowerCase().contains(widget.search!)) {
-        tempList.add(product);
-      } else if (product.brand.toLowerCase().contains(widget.search!)) {
-        tempList.add(product);
-      } else if (product.category.toLowerCase().contains(widget.search!)) {
-        tempList.add(product);
-      }
-    });
+    List<Product> tempList = getProductsByKeywords(widget.search!);
     searchResults.clear();
     searchResults.addAll(tempList);
     // setState(() {
@@ -121,16 +112,16 @@ class _SearchPageState extends State<SearchPage>
               controller: searchController,
               onChanged: (value) {
                 if (value.isNotEmpty) {
-                  List<Product> tempList = [];
-                  products.forEach((product) {
-                    if (product.name.toLowerCase().contains(value)) {
-                      tempList.add(product);
-                    } else if (product.brand.toLowerCase().contains(value)) {
-                      tempList.add(product);
-                    } else if (product.category.toLowerCase().contains(value)) {
-                      tempList.add(product);
-                    }
-                  });
+                  List<Product> tempList = getProductsByKeywords(value);
+                  // products.forEach((product) {
+                  //   if (product.name.toLowerCase().contains(value)) {
+                  //     tempList.add(product);
+                  //   } else if (product.brand.toLowerCase().contains(value)) {
+                  //     tempList.add(product);
+                  //   } else if (product.category.toLowerCase().contains(value)) {
+                  //     tempList.add(product);
+                  //   }
+                  // });
                   setState(() {
                     searchResults.clear();
                     searchResults.addAll(tempList);

@@ -5,10 +5,11 @@ class Product {
   String description;
   String brand;
   String category;
+  List<String> keywords;
   double price;
 
   Product(this.id, this.image, this.name, this.description, this.brand,
-      this.category, this.price);
+      this.category, this.keywords, this.price);
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -18,6 +19,7 @@ class Product {
       json["description"],
       json["brand"],
       json["category"],
+      json["keywords"],
       json["price"],
     );
   }

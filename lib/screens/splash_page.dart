@@ -1,7 +1,17 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/auth/welcome_back_page.dart';
 import 'package:ecommerce_int2/screens/main/main_page.dart';
+import 'package:ecommerce_int2/screens/payment/payment_page.dart';
+import 'package:ecommerce_int2/screens/product/components/shop_bottomSheet.dart';
+import 'package:ecommerce_int2/screens/product/view_product_page.dart';
+import 'package:ecommerce_int2/screens/search_page.dart';
+import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
+import 'package:alan_voice/alan_voice.dart';
+
+import 'address/add_address_page.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,6 +22,8 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late Animation<double> opacity;
   late AnimationController controller;
+
+  // _SplashScreenState() {}
 
   @override
   void initState() {

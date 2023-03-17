@@ -3,6 +3,7 @@ import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/product/product_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProductList extends StatelessWidget {
   List<Product> products;
@@ -109,74 +110,90 @@ class ProductCard extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => ProductPage(product: product))),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(left: 30),
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(24)),
-              color: mediumYellow,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  onPressed: () {},
-                  color: Colors.white,
-                ),
-                Column(
-                  children: <Widget>[
-                    Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            product.name,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 16.0),
+      child: Container(
+        margin: EdgeInsets.only(top: 50),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(left: 30),
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(24)),
+                color: mediumYellow,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: () {},
+                    color: Colors.white,
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              product.id,
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 16.0),
+                            ),
+                          )),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              product.name,
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 16.0),
+                            ),
+                          )),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 12.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 4.0, 12.0, 4.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10)),
+                            color: Color.fromRGBO(224, 69, 10, 1),
                           ),
-                        )),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 12.0),
-                        padding: const EdgeInsets.fromLTRB(8.0, 4.0, 12.0, 4.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10)),
-                          color: Color.fromRGBO(224, 69, 10, 1),
-                        ),
-                        child: Text(
-                          '\$${product.price}',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                          child: Text(
+                            'RM ${product.price}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Positioned(
-            child: Hero(
-              tag: product.image,
-              child: Image.asset(
-                product.image,
-                height: height / 1.7,
-                width: width / 1.4,
-                fit: BoxFit.contain,
+                    ],
+                  )
+                ],
               ),
             ),
-          ),
-        ],
+            Positioned(
+              top: -80,
+              child: Hero(
+                tag: product.image,
+                child: SvgPicture.asset(
+                  product.image,
+                  height: height / 1.4,
+                  width: width / 1.4,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -15,6 +15,12 @@ class _ShopBottomSheetState extends State<ShopBottomSheet> {
   List<Product> products = getProducts();
 
   @override
+  void initState() {
+    print('Output>>> SHOP BOTTOM SHEET');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget confirmButton = InkWell(
       onTap: () async {
