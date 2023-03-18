@@ -288,9 +288,9 @@ class _MainPageState extends State<MainPage>
                     SliverToBoxAdapter(
                       child: appBar,
                     ),
-                    SliverToBoxAdapter(
-                      child: topHeader,
-                    ),
+                    // SliverToBoxAdapter(
+                    //   child: topHeader,
+                    // ),
                     SliverToBoxAdapter(
                       child: ProductList(
                         products: products,
