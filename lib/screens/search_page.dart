@@ -69,27 +69,6 @@ class _SearchPageState extends State<SearchPage>
     searchResults.clear();
     searchResults.addAll(tempList);
 
-    String productNames = "";
-    bool _stop = false;
-    tempList.asMap().forEach((index, element) {
-      // read three Items only
-      if (index < 3) {
-        if (index == tempList.length - 1) {
-          productNames += "and ";
-        }
-        productNames += "${element.name} from ${element.brand}, ";
-      } else {
-        if (_stop == false) {
-          productNames += "and more.";
-          _stop = true;
-        }
-      }
-    });
-
-    // Alan Voice
-    AlanVoice.playText(
-        "We have $productNames, to view the product, say 'I want to see' follow by product code.");
-
     // setState(() {
 
     // });

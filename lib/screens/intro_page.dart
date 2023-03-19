@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/product.dart';
@@ -24,7 +26,31 @@ class _IntroPageState extends State<IntroPage>
   late Animation<double> opacity;
   late AnimationController controller;
 
-  // _IntroPageState() {}
+  _IntroPageState() {
+    void _handleCommand(Map<String, dynamic> command) {
+      print('Start handle Command');
+      print("Output>>> $command");
+
+      switch (command["command"]) {
+        case 'getStarted':
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => MainPage(),
+          ));
+          break;
+      }
+    }
+
+    /// Init Alan Button with project key from Alan Studio
+    AlanVoice.addButton(
+      "7e8c76af5acb0245cbf3c098c789d13a2e956eca572e1d8b807a3e2338fdd0dc/stage",
+    );
+
+    /// Handle commands from Alan Studio
+    AlanVoice.onCommand.add((command) {
+      debugPrint("Output>>> got new command ${command.toString()}");
+      _handleCommand(command.data);
+    });
+  }
 
   @override
   void initState() {
@@ -38,17 +64,16 @@ class _IntroPageState extends State<IntroPage>
     // controller.forward().then((_) {
     //   navigationPage();
     // });
+    Timer(Duration(seconds: 2), () {
+      AlanVoice.activate();
+      AlanVoice.playText("Welcome to Glam");
+    });
   }
 
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
-  }
-
-  void navigationPage() {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (_) => IntroPage()));
   }
 
   Widget build(BuildContext context) {
@@ -61,7 +86,7 @@ class _IntroPageState extends State<IntroPage>
           children: <Widget>[
             new Positioned(
               left: 25.0,
-              top: 450.0,
+              top: 475.0,
               child: TextButton(
                 child: Text('Get Started'),
                 style: TextButton.styleFrom(

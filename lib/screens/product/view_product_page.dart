@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/product/components/rating_bottomSheet.dart';
 import 'package:ecommerce_int2/screens/search_page.dart';
+import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,6 +26,7 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   int active = 0;
+  Timer _timer = new Timer(Duration.zero, () {});
 
   ///list of product colors
   List<Widget> colors() {
@@ -60,7 +64,7 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
     // TODO: implement initState
     Product product = widget.product;
     AlanVoice.playText(
-        "${product.name}, a ${product.category} from ${product.brand}. ${product.description}. The price is RM ${product.price}");
+        "${product.name}, a ${product.category} from ${product.brand}. ${product.description}. The price is ${product.price} Ringgit Malaysia");
     AlanVoice.playText(
         "To buy now, say 'Buy now'. To add to cart, say 'Add to cart'.");
     super.initState();
@@ -176,7 +180,7 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
                     ),
                   ]),
                 ), */
-                MoreProducts()
+                // MoreProducts()
               ],
             ),
           ),

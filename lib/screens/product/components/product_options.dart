@@ -1,3 +1,4 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
@@ -83,9 +84,10 @@ class ProductOption extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      scaffoldKey.currentState!.showBottomSheet((context) {
-                        return ShopBottomSheet();
-                      });
+                      // scaffoldKey.currentState!.showBottomSheet((context) {
+                      //   return ShopBottomSheet();
+                      // });
+                      AlanVoice.sendText("Add to Cart");
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width / 2.5,
