@@ -40,7 +40,8 @@ class _ShopItemListState extends State<ShopItemList> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(top: 12.0, right: 12.0),
+                        padding:
+                            EdgeInsets.only(top: 12.0, right: 12.0, left: 85),
                         width: 200,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,29 +55,37 @@ class _ShopItemListState extends State<ShopItemList> {
                                 color: darkGrey,
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: 160,
-                                padding: const EdgeInsets.only(
-                                    left: 32.0, top: 8.0, bottom: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    ColorOption(Colors.red),
-                                    Text(
-                                      '\$${widget.product.price}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: darkGrey,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
+                            Text(
+                              '\$${widget.product.price}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: darkGrey,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0),
+                            ),
+                            // Align(
+                            //   alignment: Alignment.centerRight,
+                            //   child: Container(
+                            //     width: 160,
+                            //     padding: const EdgeInsets.only(
+                            //         left: 32.0, top: 8.0, bottom: 8.0),
+                            //     child: Row(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.spaceBetween,
+                            //       children: <Widget>[
+                            //         ColorOption(Colors.red),
+                            //         Text(
+                            //           '\$${widget.product.price}',
+                            //           textAlign: TextAlign.center,
+                            //           style: TextStyle(
+                            //               color: darkGrey,
+                            //               fontWeight: FontWeight.bold,
+                            //               fontSize: 18.0),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

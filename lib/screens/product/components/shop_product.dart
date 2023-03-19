@@ -57,22 +57,23 @@ class ShopProductDisplay extends StatelessWidget {
       width: 200,
       child: Stack(children: <Widget>[
         Positioned(
-          left: 25,
+          top: 30,
+          left: 55,
           child: SizedBox(
-            height: 150,
-            width: 150,
+            height: 90,
+            width: 90,
             child: Transform.scale(
               scale: 1.2,
-              child: Image.asset('assets/bottom_yellow.png'),
+              child: Image.asset('assets/bottom_green.png'),
             ),
           ),
         ),
         Positioned(
-          left: 50,
-          top: 5,
+          left: 35,
+          top: 10,
           child: SizedBox(
-              height: 80,
-              width: 80,
+              height: 110,
+              width: 110,
               child: SvgPicture.asset(
                 '${product.image}',
                 fit: BoxFit.contain,
