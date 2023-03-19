@@ -3,7 +3,7 @@
 
 title('Ecommerce Command')
 
-const products = {
+/* const products = {
     "lipstick": [
         {
             id: "loreal_lipstick_red", 
@@ -56,7 +56,7 @@ const products = {
             brand: "L'Oréal"
         },
     ],
-};
+}; */
 
 // const PRODUCT_CAT = Object.keys(products).join("|");
 // const PRODUCT = Object.values(products).flat().map(product => product.name).join("|");
@@ -88,7 +88,10 @@ const PRODUCT_IDS = [
 // )
 
 intent(`(Open|Go to) cart`, p => {
-    p.play({command: 'navigation', route: '/cart'});
+    p.play({
+        command: 'navigation',
+        route: '/cart'
+    });
     p.play(`Here is your cart`);
 });
 
@@ -96,7 +99,7 @@ intent(
     `Proceed to checkout page`,
     p => {
         p.play({
-            command:'navigation',
+            command: 'navigation',
             route: '/cart',
         });
         p.play(`Here is your checkout page`);
@@ -104,7 +107,10 @@ intent(
 )
 
 intent(`(Open|Go to|Back to) (home|homepage|main page)`, p => {
-    p.play({command: 'navigation', route: '/home'});
+    p.play({
+        command: 'navigation',
+        route: '/home'
+    });
     p.play(`(This is your homepage|Here you go)`);
 });
 
@@ -113,9 +119,9 @@ intent(
     p => {
         let selectedProducts = products[p.P.value.toLowerCase()];
         p.play({
-            command:'navigation', 
-            route: '/search',  
-            data: p.P.value, 
+            command: 'navigation',
+            route: '/search',
+            data: p.P.value,
             products: JSON.stringify(selectedProducts)
         });
         p.play(`Here is the search result of ${p.P}`);
@@ -126,21 +132,22 @@ intent(
     `(I want to|) (See|Check) $(P ${PRODUCT_IDS})`,
     p => {
         p.play({
-            command:'navigation', 
-            route: '/product', 
-            data: p.P.value(), 
+            command: 'navigation',
+            route: '/product',
+            data: p.P.value(),
         });
         p.play(`Here you go ${p.P}`);
     }
 );
 
 intent(
-    `Add (this product|) to cart`,
+    `Add $(P ${PRODUCT_IDS}) to cart`,
     p => {
         p.play({
-            command:'addToCart',
+            command: 'addToCart',
+            data: p.P.value(),
         });
-        p.play(`Added to cart. Do you want to proceed to checkout page or continue shopping?`);
+        p.play(`Added to cart.`);
     }
 )
 
@@ -148,7 +155,7 @@ intent(
     `Buy now`,
     p => {
         p.play({
-            command:'buyNow',
+            command: 'buyNow',
         });
         p.play(`Going to checkout page`);
     }
