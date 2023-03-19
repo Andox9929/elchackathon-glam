@@ -2,6 +2,7 @@ import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/data/product_data.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/product/view_product_page.dart';
+import 'package:ecommerce_int2/screens/search_result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rubber/rubber.dart';
@@ -24,7 +25,7 @@ class _SearchPageState extends State<SearchPage>
   String selectedCategory = "";
   String selectedPrice = "";
 
-  List<Product> products = [];
+  List<Product> products = getProducts();
 
   List<String> timeFilter = [
     'Brand',
@@ -64,8 +65,6 @@ class _SearchPageState extends State<SearchPage>
         lowerBoundValue: AnimationControllerValue(pixel: 50),
         duration: Duration(milliseconds: 200));
     searchController.text = widget.search ?? '';
-    // products = getProductsByCategory(widget.search!);
-    products = getProducts();
     List<Product> tempList = getProductsByKeywords(widget.search!);
     searchResults.clear();
     searchResults.addAll(tempList);
@@ -121,9 +120,10 @@ class _SearchPageState extends State<SearchPage>
     AlanVoice.setVisualState(visual);
   }
 
-  Widget _getLowerLayer() {
+  Widget _getLowerLayer(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: kToolbarHeight),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      // margin: EdgeInsets.only(top: kToolbarHeight),
       child: Column(
         children: <Widget>[
           Padding(
@@ -131,6 +131,7 @@ class _SearchPageState extends State<SearchPage>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                BackButton(),
                 Text(
                   'Search',
                   style: TextStyle(
@@ -139,7 +140,6 @@ class _SearchPageState extends State<SearchPage>
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                CloseButton()
               ],
             ),
           ),
@@ -153,15 +153,6 @@ class _SearchPageState extends State<SearchPage>
               onChanged: (value) {
                 if (value.isNotEmpty) {
                   List<Product> tempList = getProductsByKeywords(value);
-                  // products.forEach((product) {
-                  //   if (product.name.toLowerCase().contains(value)) {
-                  //     tempList.add(product);
-                  //   } else if (product.brand.toLowerCase().contains(value)) {
-                  //     tempList.add(product);
-                  //   } else if (product.category.toLowerCase().contains(value)) {
-                  //     tempList.add(product);
-                  //   }
-                  // });
                   setState(() {
                     searchResults.clear();
                     searchResults.addAll(tempList);
@@ -176,22 +167,63 @@ class _SearchPageState extends State<SearchPage>
               },
               cursorColor: darkGrey,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.only(top: 15),
                 border: InputBorder.none,
                 prefixIcon: SvgPicture.asset(
                   'assets/icons/search_icon.svg',
                   fit: BoxFit.scaleDown,
                 ),
-                suffix: TextButton(
-                  onPressed: () {
-                    searchController.clear();
-                    searchResults.clear();
-                  },
-                  child: Text(
-                    'Clear',
-                    style: TextStyle(color: Colors.red),
-                  ),
+                suffixIcon: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                      width: 10,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          searchController.clear();
+                          searchResults.clear();
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => SearchResultPage(
+                              search: searchController.text,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
+                // suffix: TextButton(
+                //   style: TextButton.styleFrom(
+                //       // padding: EdgeInsets.zero,
+                //       // minimumSize: Size(15, 15),
+                //       ),
+                //   onPressed: () {
+                //     searchController.clear();
+                //     searchResults.clear();
+                //   },
+                //   child: Icon(
+                //     Icons.close,
+                //     color: Colors.black,
+                //   ),
+                // ),
               ),
             ),
           ),
@@ -199,21 +231,21 @@ class _SearchPageState extends State<SearchPage>
             child: Container(
               color: Colors.orange[50],
               child: ListView.builder(
-                  itemCount: 1,
+                  itemCount: searchResults.length,
                   itemBuilder: (_, index) => Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        //   child: ListTile(
-                        //   onTap: () =>
-                        //       Navigator.of(context).push(MaterialPageRoute(
-                        //           builder: (_) => ViewProductPage(
-                        //                 product: searchResults[index],
-                        //               ))),
-                        //   title: Text(searchResults[index].name),
-                        // ))),
-
-                        child: ProductList(
-                          products: searchResults,
+                        child: ListTile(
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => ViewProductPage(
+                                        product: searchResults[index],
+                                      ))),
+                          title: Text(searchResults[index].name),
                         ),
+
+                        // child: ProductList(
+                        //   products: searchResults,
+                        // ),
                       )),
             ),
           )
@@ -367,26 +399,7 @@ class _SearchPageState extends State<SearchPage>
       child: SafeArea(
         top: true,
         bottom: false,
-        child: Scaffold(
-//          bottomSheet: ClipRRect(
-//            borderRadius: BorderRadius.only(
-//                topRight: Radius.circular(25), topLeft: Radius.circular(25)),
-//            child: BottomSheet(
-//                onClosing: () {},
-//                builder: (_) => Container(
-//                      padding: EdgeInsets.all(16.0),
-//                      child: Row(
-//                          mainAxisAlignment: MainAxisAlignment.center,
-//                          children: <Widget>[Text('Filters')]),
-//                      color: Colors.white,
-//                      width: MediaQuery.of(context).size.height,
-//                    )),
-//          ),
-            body: RubberBottomSheet(
-          lowerLayer: _getLowerLayer(), // The underlying page (Widget)
-          upperLayer: _getUpperLayer(), // The bottomsheet content (Widget)
-          animationController: _controller, // The one we created earlier
-        )),
+        child: Scaffold(body: _getLowerLayer(context)),
       ),
     );
   }

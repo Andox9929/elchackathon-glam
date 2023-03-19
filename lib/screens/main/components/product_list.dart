@@ -86,7 +86,7 @@ class ProductCard extends StatelessWidget {
                             child: Text(
                               product.id,
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 32.0),
+                                  color: Colors.white, fontSize: 20.0),
                             ),
                           )),
                       Align(
@@ -97,7 +97,7 @@ class ProductCard extends StatelessWidget {
                             child: Text(
                               product.name,
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 16.0),
+                                  color: Colors.white, fontSize: 12.0),
                             ),
                           )),
                       // Align(
