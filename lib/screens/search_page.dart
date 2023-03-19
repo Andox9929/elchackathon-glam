@@ -7,6 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rubber/rubber.dart';
 import 'package:alan_voice/alan_voice.dart';
 
+import 'main/components/product_list.dart';
+
 class SearchPage extends StatefulWidget {
   final String? search;
   final List<Product>? productList;
@@ -197,17 +199,22 @@ class _SearchPageState extends State<SearchPage>
             child: Container(
               color: Colors.orange[50],
               child: ListView.builder(
-                  itemCount: searchResults.length,
+                  itemCount: 1,
                   itemBuilder: (_, index) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: ListTile(
-                        onTap: () =>
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => ViewProductPage(
-                                      product: searchResults[index],
-                                    ))),
-                        title: Text(searchResults[index].name),
-                      ))),
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        //   child: ListTile(
+                        //   onTap: () =>
+                        //       Navigator.of(context).push(MaterialPageRoute(
+                        //           builder: (_) => ViewProductPage(
+                        //                 product: searchResults[index],
+                        //               ))),
+                        //   title: Text(searchResults[index].name),
+                        // ))),
+
+                        child: ProductList(
+                          products: searchResults,
+                        ),
+                      )),
             ),
           )
         ],

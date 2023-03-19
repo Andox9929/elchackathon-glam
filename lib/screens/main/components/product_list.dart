@@ -9,8 +9,6 @@ import 'package:flutter_svg/svg.dart';
 class ProductList extends StatelessWidget {
   List<Product> products;
 
-  final SwiperController swiperController = SwiperController();
-
   ProductList({required this.products});
 
   @override
@@ -18,79 +16,24 @@ class ProductList extends StatelessWidget {
     double cardHeight = MediaQuery.of(context).size.height / 2.7;
     double cardWidth = MediaQuery.of(context).size.width / 1.8;
 
-    return SizedBox(
-      height: cardHeight,
-      child: Swiper(
-        itemCount: products.length,
-        itemBuilder: (_, index) {
-          return ProductCard(
-              height: cardHeight, width: cardWidth, product: products[index]);
-        },
-        scale: 0.8,
-        controller: swiperController,
-        viewportFraction: 0.6,
-        loop: false,
-        fade: 0.5,
-        // pagination: SwiperCustomPagination(
-        //   builder: (context, config) {
-        //     if (config!.itemCount! > 20) {
-        //       print(
-        //           "The itemCount is too big, we suggest use FractionPaginationBuilder instead of DotSwiperPaginationBuilder in this sitituation");
-        //     }
-        //     Color activeColor = mediumYellow;
-        //     Color color = Colors.grey.withOpacity(.3);
-        //     double size = 10.0;
-        //     double space = 5.0;
-
-        //     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
-        //         config.layout == SwiperLayout.DEFAULT) {
-        //       return new PageIndicator(
-        //         count: config.itemCount!,
-        //         controller: config.pageController!,
-        //         layout: config.indicatorLayout,
-        //         size: size,
-        //         activeColor: activeColor,
-        //         color: color,
-        //         space: space,
-        //       );
-        //     }
-
-        //     List<Widget> dots = [];
-
-        //     int itemCount = config.itemCount!;
-        //     int activeIndex = config.activeIndex!;
-
-        //     for (int i = 0; i < itemCount; ++i) {
-        //       bool active = i == activeIndex;
-        //       dots.add(Container(
-        //         key: Key("pagination_$i"),
-        //         margin: EdgeInsets.all(space),
-        //         child: ClipOval(
-        //           child: Container(
-        //             decoration: BoxDecoration(
-        //               shape: BoxShape.circle,
-        //               color: active ? activeColor : color,
-        //             ),
-        //             width: size,
-        //             height: size,
-        //           ),
-        //         ),
-        //       ));
-        //     }
-
-        //     return Padding(
-        //       padding: const EdgeInsets.all(16.0),
-        //       child: Align(
-        //         alignment: Alignment.centerLeft,
-        //         child: Column(
-        //           mainAxisSize: MainAxisSize.min,
-        //           children: dots,
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: products.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: cardWidth / cardHeight,
       ),
+      itemBuilder: (_, index) {
+        return Padding(
+          padding: EdgeInsets.all(7),
+          child: ProductCard(
+            height: cardHeight,
+            width: cardWidth,
+            product: products[index],
+          ),
+        );
+      },
     );
   }
 }
@@ -117,7 +60,7 @@ class ProductCard extends StatelessWidget {
           clipBehavior: Clip.none,
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.only(left: 30),
+              // margin: const EdgeInsets.only(left: 30),
               height: height,
               width: width,
               decoration: BoxDecoration(
@@ -138,8 +81,8 @@ class ProductCard extends StatelessWidget {
                       Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 50),
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, top: 50, bottom: 20),
                             child: Text(
                               product.id,
                               style: TextStyle(
@@ -185,20 +128,20 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: -80,
-              right: -40,
+              top: -90,
+              right: -60,
               child: Hero(
                 tag: product.image,
                 child: SvgPicture.asset(
                   product.image,
-                  height: height / 1.4,
-                  width: width / 1.4,
+                  height: height / 1.3,
+                  width: width / 1.3,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
             Positioned(
-              left: 30,
+              left: 0,
               bottom: 0,
               child: Container(
                 decoration: BoxDecoration(
@@ -217,29 +160,19 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              right: 0,
-              bottom: 0,
-              child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                      // bottomLeft: Radius.circular(10),
-                    ),
-                    color: Color.fromARGB(255, 249, 85, 20),
+                right: 0,
+                bottom: 0,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  child: Text(
+                    'RM ${product.price}',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 14),
-                    child: Text(
-                      'RM ${product.price}',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )),
-            ),
+                )),
           ],
         ),
       ),
