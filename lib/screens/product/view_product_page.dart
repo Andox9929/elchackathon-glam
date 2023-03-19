@@ -87,46 +87,17 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    Widget description = Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Text(
-        widget.product.description,
-        maxLines: 5,
-        semanticsLabel: '...',
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Color.fromRGBO(255, 255, 255, 0.6)),
-      ),
-    );
-
     return Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: yellow,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: darkGrey),
-          actions: <Widget>[
-            IconButton(
-              icon: new SvgPicture.asset(
-                'assets/icons/search_icon.svg',
-                fit: BoxFit.scaleDown,
-              ),
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => SearchPage())),
-            )
-          ],
-          title: Text(
-            widget.product.category[0].toUpperCase() +
-                widget.product.category.substring(1).toLowerCase(),
-            style: const TextStyle(
-                color: darkGrey,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Montserrat",
-                fontSize: 18.0),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Container(
+      key: _scaffoldKey,
+      backgroundColor: Color(0xFF0DC8C8),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      body: Stack(
+        children: [
+          Container(
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: <Widget>[
@@ -134,56 +105,89 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
                   _scaffoldKey,
                   product: widget.product,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 0.0),
-                  child: Text(
-                    "RM" + widget.product.price.toStringAsFixed(2),
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromRGBO(255, 255, 255, 0.6),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Description',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        widget.product.description,
+                        maxLines: 5,
+                        semanticsLabel: '...',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                // Add spacing between the product description and the buttons
+                SizedBox(height: 32),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 14,
+                      ),
+                      child: Text(
+                        'RM ${widget.product.price}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                description,
-                /* Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                    Flexible(
-                      child: ColorList([
-                        Colors.red,
-                        Colors.blue,
-                        Colors.purple,
-                        Colors.green,
-                        Colors.yellow
-                      ]),
-                    ),
-                    RawMaterialButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return RatingBottomSheet();
-                          },
-                          //elevation: 0,
-                          //backgroundColor: Colors.transparent
-                        );
-                      },
-                      constraints:
-                          const BoxConstraints(minWidth: 45, minHeight: 45),
-                      child: Icon(Icons.favorite,
-                          color: Color.fromRGBO(255, 137, 147, 1)),
-                      elevation: 0.0,
-                      shape: CircleBorder(),
-                      fillColor: Color.fromRGBO(255, 255, 255, 0.4),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        color: Color.fromRGBO(247, 247, 247, 1.000),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 65,
+                          vertical: 25,
+                        ),
+                        child: Text('Buy Now'),
+                      ),
                     ),
                   ]),
                 ), */
                 // MoreProducts()
+                  ),
+                ),
               ],
             ),
           ),
-        ));
+        ],
+      ),
+    );
   }
 }
