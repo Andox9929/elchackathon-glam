@@ -35,6 +35,27 @@ class _SearchResultPageState extends State<SearchResultPage> with RouteAware {
     searchResults.clear();
     searchResults.addAll(tempList);
 
+    String productNames = "";
+    bool _stop = false;
+    tempList.asMap().forEach((index, element) {
+      // read three Items only
+      if (index < 3) {
+        if (index == tempList.length - 1) {
+          productNames += "and ";
+        }
+        productNames += "${element.name} from ${element.brand}, ";
+      } else {
+        if (_stop == false) {
+          productNames += "and more.";
+          _stop = true;
+        }
+      }
+    });
+
+    // Alan Voice
+    AlanVoice.playText(
+        "We have $productNames, to view the product, say 'I want to see' follow by product code.");
+
     super.initState();
   }
 
@@ -64,9 +85,9 @@ class _SearchResultPageState extends State<SearchResultPage> with RouteAware {
           iconTheme: IconThemeData(color: darkGrey),
           actions: <Widget>[
             IconButton(
-              icon: new SvgPicture.asset(
-                'assets/icons/search_icon.svg',
-                fit: BoxFit.scaleDown,
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
               ),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => SearchPage())),
@@ -75,7 +96,7 @@ class _SearchResultPageState extends State<SearchResultPage> with RouteAware {
           title: Text(
             widget.search,
             style: const TextStyle(
-                color: darkGrey,
+                color: Colors.white,
                 fontWeight: FontWeight.w500,
                 fontFamily: "Montserrat",
                 fontSize: 18.0),
@@ -84,7 +105,7 @@ class _SearchResultPageState extends State<SearchResultPage> with RouteAware {
         body: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            child: ProductList(products: products),
+            child: ProductList(products: searchResults),
           ),
         ));
   }

@@ -1,3 +1,4 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
@@ -60,6 +61,58 @@ class ProductOption extends StatelessWidget {
                             color: Colors.white,
                             shadows: shadow)),
                   ),
+                  InkWell(
+                    onTap: () async {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => CheckOutPage()));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          gradient: mainButton,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(10.0))),
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Center(
+                        child: Text(
+                          'Buy Now',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // scaffoldKey.currentState!.showBottomSheet((context) {
+                      //   return ShopBottomSheet();
+                      // });
+                      AlanVoice.sendText("Add to Cart");
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          gradient: mainButton,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(10.0))),
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Center(
+                        child: Text(
+                          'Add to cart',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

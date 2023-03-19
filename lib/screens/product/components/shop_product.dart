@@ -79,16 +79,16 @@ class ShopProductDisplay extends StatelessWidget {
                 fit: BoxFit.contain,
               )),
         ),
-        Positioned(
-          right: 30,
-          bottom: 25,
-          child: Align(
-            child: IconButton(
-              icon: Image.asset('assets/red_clear.png'),
-              onPressed: onPressed,
-            ),
-          ),
-        )
+        // Positioned(
+        //   right: 30,
+        //   bottom: 25,
+        //   child: Align(
+        //     child: IconButton(
+        //       icon: Image.asset('assets/red_clear.png'),
+        //       onPressed: onPressed,
+        //     ),
+        //   ),
+        // )
       ]),
     );
   }

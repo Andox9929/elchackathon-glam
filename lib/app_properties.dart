@@ -8,7 +8,7 @@ const Color darkGrey = Color(0xff202020);
 
 const LinearGradient mainButton = LinearGradient(colors: [
   Color(0xFF00B2B2),
-  Color(0xFF0DC8C8),
+  // Color(0xFF0DC8C8),
   Color(0xFF00B2B2),
 ], begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter);
 

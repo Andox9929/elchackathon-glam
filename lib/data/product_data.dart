@@ -66,6 +66,11 @@ List<Product> getProducts() {
   ];
 }
 
+Product getProduct(String id) {
+  List<Product> products = getProducts();
+  return products.where((element) => element.id == id).first;
+}
+
 List<Product> getProductsByCategory(String category) {
   List<Product> products = getProducts();
   products = products.where((element) => element.category == category).toList();

@@ -18,16 +18,18 @@ class CheckOutPage extends StatefulWidget {
 class _CheckOutPageState extends State<CheckOutPage> with RouteAware {
   SwiperController swiperController = SwiperController();
 
-  List<Product> products = getProducts();
+  List<Product> products = [
+    getProduct("DO2"),
+  ];
 
   @override
   void didPush() {
-    setVisuals('view_product');
+    setVisuals('checkout');
   }
 
   @override
   void didPop() {
-    setVisuals('search');
+    setVisuals('view_product');
   }
 
   void setVisuals(String screen) {

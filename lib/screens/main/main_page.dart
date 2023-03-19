@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:ecommerce_int2/app_properties.dart';
@@ -31,6 +32,7 @@ class MainPage extends StatefulWidget {
 List<String> timelines = ['Weekly featured', 'Best of June', 'Best of 2018'];
 String selectedTimeline = 'Weekly featured';
 List<Product> products = _productData.getProducts();
+Timer _timer = new Timer(Duration.zero, () {});
 
 class _MainPageState extends State<MainPage>
     with TickerProviderStateMixin<MainPage>, RouteAware {
@@ -40,6 +42,7 @@ class _MainPageState extends State<MainPage>
   _MainPageState() {
     void _handleCommand(Map<String, dynamic> command) {
       print('Start handle Command');
+      print("Output>>> $command");
 
       switch (command["command"]) {
         case "navigation":
@@ -103,12 +106,33 @@ class _MainPageState extends State<MainPage>
               break;
           }
           break;
+        case 'getStarted':
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => MainPage(),
+          ));
+          break;
         case 'addToCart':
-          final GlobalKey<ScaffoldState> _scaffoldKey =
-              new GlobalKey<ScaffoldState>();
-          _scaffoldKey.currentState!.showBottomSheet((context) {
-            return ShopBottomSheet();
-          });
+          // showDialog(
+          //     context: context,
+          //     builder: (BuildContext builderContext) {
+          //       _timer = Timer(Duration(seconds: 2), () {
+          //         Navigator.of(context).pop();
+          //       });
+
+          //       return AlertDialog(
+          //         backgroundColor: Colors.red,
+          //         title: Text('Title'),
+          //         content: SingleChildScrollView(
+          //           child: Text('Added to Cart'),
+          //         ),
+          //       );
+          //     }).then((val) {
+          //   if (_timer.isActive) {
+          //     _timer.cancel();
+          //   }
+          // });
+          final snackBar = SnackBar(content: Text("Items added to cart"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
           break;
         case 'buyNow':
           Navigator.of(context).push(
@@ -131,11 +155,6 @@ class _MainPageState extends State<MainPage>
       }
     }
 
-    /// Init Alan Button with project key from Alan Studio
-    AlanVoice.addButton(
-      "7e8c76af5acb0245cbf3c098c789d13a2e956eca572e1d8b807a3e2338fdd0dc/stage",
-    );
-
     /// Handle commands from Alan Studio
     AlanVoice.onCommand.add((command) {
       debugPrint("Output>>> got new command ${command.toString()}");
@@ -156,6 +175,9 @@ class _MainPageState extends State<MainPage>
     WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("main"));
     tabController = TabController(length: 5, vsync: this);
     bottomTabController = TabController(length: 3, vsync: this);
+
+    // Welcome message
+    // AlanVoice.playText("Welcome to Glam");
   }
 
   @override
@@ -272,7 +294,7 @@ class _MainPageState extends State<MainPage>
       controller: tabController,
     );*/
     return Scaffold(
-      // bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
+      bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
       body: CustomPaint(
         painter: MainBackground(),
         child: TabBarView(
