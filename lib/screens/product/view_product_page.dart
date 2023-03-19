@@ -1,3 +1,4 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/product/components/rating_bottomSheet.dart';
 import 'package:ecommerce_int2/screens/search_page.dart';
@@ -18,7 +19,7 @@ class ViewProductPage extends StatefulWidget {
   _ViewProductPageState createState() => _ViewProductPageState();
 }
 
-class _ViewProductPageState extends State<ViewProductPage> {
+class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   int active = 0;
@@ -55,6 +56,32 @@ class _ViewProductPageState extends State<ViewProductPage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    Product product = widget.product;
+    AlanVoice.playText(
+        "${product.name}, a ${product.category} from ${product.brand}. ${product.description}. The price is RM ${product.price}");
+    AlanVoice.playText(
+        "To buy now, say 'Buy now'. To add to cart, say 'Add to cart'.");
+    super.initState();
+  }
+
+  @override
+  void didPush() {
+    setVisuals('view_product');
+  }
+
+  @override
+  void didPop() {
+    setVisuals('search');
+  }
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget description = Padding(
       padding: const EdgeInsets.all(24.0),
@@ -85,7 +112,8 @@ class _ViewProductPageState extends State<ViewProductPage> {
             )
           ],
           title: Text(
-            'Headphones',
+            widget.product.category[0].toUpperCase() +
+                widget.product.category.substring(1).toLowerCase(),
             style: const TextStyle(
                 color: darkGrey,
                 fontWeight: FontWeight.w500,
@@ -102,8 +130,20 @@ class _ViewProductPageState extends State<ViewProductPage> {
                   _scaffoldKey,
                   product: widget.product,
                 ),
-                description,
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 0.0),
+                  child: Text(
+                    "RM" + widget.product.price.toStringAsFixed(2),
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromRGBO(255, 255, 255, 0.6),
+                    ),
+                  ),
+                ),
+                description,
+                /* Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                     Flexible(
@@ -135,7 +175,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                       fillColor: Color.fromRGBO(255, 255, 255, 0.4),
                     ),
                   ]),
-                ),
+                ), */
                 MoreProducts()
               ],
             ),

@@ -2,6 +2,7 @@ import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'shop_bottomSheet.dart';
 
@@ -21,7 +22,7 @@ class ProductOption extends StatelessWidget {
         children: <Widget>[
           Positioned(
             left: 16.0,
-            child: Image.asset(
+            child: SvgPicture.asset(
               product.image,
               height: 200,
               width: 200,
@@ -36,6 +37,16 @@ class ProductOption extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Text(product.id,
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: shadow)),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(product.name,

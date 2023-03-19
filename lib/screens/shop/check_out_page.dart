@@ -1,3 +1,4 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/data/product_data.dart';
@@ -14,10 +15,25 @@ class CheckOutPage extends StatefulWidget {
   _CheckOutPageState createState() => _CheckOutPageState();
 }
 
-class _CheckOutPageState extends State<CheckOutPage> {
+class _CheckOutPageState extends State<CheckOutPage> with RouteAware {
   SwiperController swiperController = SwiperController();
 
   List<Product> products = getProducts();
+
+  @override
+  void didPush() {
+    setVisuals('view_product');
+  }
+
+  @override
+  void didPop() {
+    setVisuals('search');
+  }
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
+  }
 
   @override
   Widget build(BuildContext context) {

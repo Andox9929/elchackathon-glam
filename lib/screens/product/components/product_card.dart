@@ -1,5 +1,6 @@
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -23,10 +24,12 @@ class ProductCard extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   child: Container(
                     padding: EdgeInsets.all(16.0),
-                    width: MediaQuery.of(context).size.width / 2 - 64,
-                    height: MediaQuery.of(context).size.width / 2 - 64,
-                    child: Image.asset(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: MediaQuery.of(context).size.width / 2,
+                    child: SvgPicture.asset(
                       product.image,
+                      width: 200,
+                      height: 200,
                     ),
                   ),
                 ),

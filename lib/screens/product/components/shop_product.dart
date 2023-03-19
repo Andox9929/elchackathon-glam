@@ -1,6 +1,7 @@
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ShopProduct extends StatelessWidget {
   final Product product;
@@ -72,7 +73,7 @@ class ShopProductDisplay extends StatelessWidget {
           child: SizedBox(
               height: 80,
               width: 80,
-              child: Image.asset(
+              child: SvgPicture.asset(
                 '${product.image}',
                 fit: BoxFit.contain,
               )),

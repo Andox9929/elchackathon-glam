@@ -5,6 +5,7 @@ import 'package:ecommerce_int2/screens/product/view_product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rubber/rubber.dart';
+import 'package:alan_voice/alan_voice.dart';
 
 class SearchPage extends StatefulWidget {
   final String? search;
@@ -16,7 +17,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   String selectedPeriod = "";
   String selectedCategory = "";
   String selectedPrice = "";
@@ -66,6 +67,28 @@ class _SearchPageState extends State<SearchPage>
     List<Product> tempList = getProductsByKeywords(widget.search!);
     searchResults.clear();
     searchResults.addAll(tempList);
+
+    String productNames = "";
+    bool _stop = false;
+    tempList.asMap().forEach((index, element) {
+      // read three Items only
+      if (index < 3) {
+        if (index == tempList.length - 1) {
+          productNames += "and ";
+        }
+        productNames += "${element.name} from ${element.brand}, ";
+      } else {
+        if (_stop == false) {
+          productNames += "and more.";
+          _stop = true;
+        }
+      }
+    });
+
+    // Alan Voice
+    AlanVoice.playText(
+        "We have $productNames, to view the product, say 'I want to see' follow by product code.");
+
     // setState(() {
 
     // });
@@ -79,6 +102,21 @@ class _SearchPageState extends State<SearchPage>
 
   void _expand() {
     _controller.expand();
+  }
+
+  @override
+  void didPush() {
+    setVisuals('search');
+  }
+
+  @override
+  void didPop() {
+    setVisuals('main');
+  }
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
   }
 
   Widget _getLowerLayer() {
