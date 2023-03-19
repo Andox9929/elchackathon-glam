@@ -170,8 +170,39 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
     );
 
-    Widget scanFromPhoto = InkWell(
-      onTap: pickImageFromGallery,
+    Widget scanButton = InkWell(
+      onTap: () => showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(Icons.camera_alt_outlined),
+                        onPressed: captureImageFromCamera,
+                        iconSize: 60,
+                        color: yellow,
+                      ),
+                      flex: 1,
+                    ),
+                    Text('|', style: TextStyle(fontSize: 35)),
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(Icons.photo),
+                        onPressed: pickImageFromGallery,
+                        iconSize: 60,
+                        color: yellow,
+                      ),
+                      flex: 1,
+                    ),
+                  ],
+                )
+              ],
+            );
+          }),
       child: Container(
         height: 80,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -186,33 +217,7 @@ class _PaymentPageState extends State<PaymentPage> {
             ],
             borderRadius: BorderRadius.circular(9.0)),
         child: Center(
-          child: Text("Scan From Photo",
-              style: const TextStyle(
-                  color: const Color(0xfffefefe),
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                  fontSize: 20.0)),
-        ),
-      ),
-    );
-
-    Widget scanThisCard = InkWell(
-      onTap: captureImageFromCamera,
-      child: Container(
-        height: 80,
-        width: MediaQuery.of(context).size.width / 1.5,
-        decoration: BoxDecoration(
-            gradient: mainButton,
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.16),
-                offset: Offset(0, 5),
-                blurRadius: 10.0,
-              )
-            ],
-            borderRadius: BorderRadius.circular(9.0)),
-        child: Center(
-          child: Text("Scan This Card",
+          child: Text("Scan Card",
               style: const TextStyle(
                   color: const Color(0xfffefefe),
                   fontWeight: FontWeight.w600,
@@ -466,18 +471,13 @@ class _PaymentPageState extends State<PaymentPage> {
                     Center(
                         child: Padding(
                       padding: EdgeInsets.only(bottom: 20),
+                      child: scanButton,
+                    )),
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
                       child: addThisCard,
                     )),
-                    Center(
-                        child: Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: scanFromPhoto,
-                    )),
-                    Center(
-                        child: Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: scanThisCard,
-                    ))
                   ],
                 ),
               ),
