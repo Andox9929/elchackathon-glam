@@ -31,65 +31,65 @@ class ProductList extends StatelessWidget {
         viewportFraction: 0.6,
         loop: false,
         fade: 0.5,
-        pagination: SwiperCustomPagination(
-          builder: (context, config) {
-            if (config!.itemCount! > 20) {
-              print(
-                  "The itemCount is too big, we suggest use FractionPaginationBuilder instead of DotSwiperPaginationBuilder in this sitituation");
-            }
-            Color activeColor = mediumYellow;
-            Color color = Colors.grey.withOpacity(.3);
-            double size = 10.0;
-            double space = 5.0;
+        // pagination: SwiperCustomPagination(
+        //   builder: (context, config) {
+        //     if (config!.itemCount! > 20) {
+        //       print(
+        //           "The itemCount is too big, we suggest use FractionPaginationBuilder instead of DotSwiperPaginationBuilder in this sitituation");
+        //     }
+        //     Color activeColor = mediumYellow;
+        //     Color color = Colors.grey.withOpacity(.3);
+        //     double size = 10.0;
+        //     double space = 5.0;
 
-            if (config.indicatorLayout != PageIndicatorLayout.NONE &&
-                config.layout == SwiperLayout.DEFAULT) {
-              return new PageIndicator(
-                count: config.itemCount!,
-                controller: config.pageController!,
-                layout: config.indicatorLayout,
-                size: size,
-                activeColor: activeColor,
-                color: color,
-                space: space,
-              );
-            }
+        //     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
+        //         config.layout == SwiperLayout.DEFAULT) {
+        //       return new PageIndicator(
+        //         count: config.itemCount!,
+        //         controller: config.pageController!,
+        //         layout: config.indicatorLayout,
+        //         size: size,
+        //         activeColor: activeColor,
+        //         color: color,
+        //         space: space,
+        //       );
+        //     }
 
-            List<Widget> dots = [];
+        //     List<Widget> dots = [];
 
-            int itemCount = config.itemCount!;
-            int activeIndex = config.activeIndex!;
+        //     int itemCount = config.itemCount!;
+        //     int activeIndex = config.activeIndex!;
 
-            for (int i = 0; i < itemCount; ++i) {
-              bool active = i == activeIndex;
-              dots.add(Container(
-                key: Key("pagination_$i"),
-                margin: EdgeInsets.all(space),
-                child: ClipOval(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: active ? activeColor : color,
-                    ),
-                    width: size,
-                    height: size,
-                  ),
-                ),
-              ));
-            }
+        //     for (int i = 0; i < itemCount; ++i) {
+        //       bool active = i == activeIndex;
+        //       dots.add(Container(
+        //         key: Key("pagination_$i"),
+        //         margin: EdgeInsets.all(space),
+        //         child: ClipOval(
+        //           child: Container(
+        //             decoration: BoxDecoration(
+        //               shape: BoxShape.circle,
+        //               color: active ? activeColor : color,
+        //             ),
+        //             width: size,
+        //             height: size,
+        //           ),
+        //         ),
+        //       ));
+        //     }
 
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: dots,
-                ),
-              ),
-            );
-          },
-        ),
+        //     return Padding(
+        //       padding: const EdgeInsets.all(16.0),
+        //       child: Align(
+        //         alignment: Alignment.centerLeft,
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: dots,
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // ),
       ),
     );
   }
@@ -122,60 +122,63 @@ class ProductCard extends StatelessWidget {
               width: width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(24)),
-                color: mediumYellow,
+                color: Color.fromARGB(255, 0, 178, 178),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.favorite_border),
-                    onPressed: () {},
-                    color: Colors.white,
-                  ),
+                  // IconButton(
+                  //   icon: Icon(Icons.favorite_border),
+                  //   onPressed: () {},
+                  //   color: Color.fromARGB(255, 0, 178, 178),
+                  // ),
                   Column(
                     children: <Widget>[
                       Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 50),
                             child: Text(
                               product.id,
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 16.0),
+                                  color: Colors.white, fontSize: 32.0),
                             ),
                           )),
                       Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
                             child: Text(
                               product.name,
                               style: TextStyle(
                                   color: Colors.white, fontSize: 16.0),
                             ),
                           )),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 12.0),
-                          padding:
-                              const EdgeInsets.fromLTRB(8.0, 4.0, 12.0, 4.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                bottomLeft: Radius.circular(10)),
-                            color: Color.fromRGBO(224, 69, 10, 1),
-                          ),
-                          child: Text(
-                            'RM ${product.price}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: Alignment.topRight,
+                      //   child: Container(
+                      //     margin: const EdgeInsets.only(bottom: 12.0),
+                      //     padding:
+                      //         const EdgeInsets.fromLTRB(8.0, 4.0, 12.0, 4.0),
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.only(
+                      //           topLeft: Radius.circular(10),
+                      //           bottomLeft: Radius.circular(10),
+                      //           bottomRight: Radius.circular(10)),
+                      //       color: Color.fromARGB(255, 249, 85, 20),
+                      //     ),
+                      //     child: Text(
+                      //       'RM ${product.price}',
+                      //       style: TextStyle(
+                      //           color: Colors.white,
+                      //           fontSize: 18,
+                      //           fontWeight: FontWeight.bold),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   )
                 ],
@@ -183,6 +186,7 @@ class ProductCard extends StatelessWidget {
             ),
             Positioned(
               top: -80,
+              right: -40,
               child: Hero(
                 tag: product.image,
                 child: SvgPicture.asset(
@@ -192,6 +196,49 @@ class ProductCard extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
+            ),
+            Positioned(
+              left: 30,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    // bottomRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                  color: Color.fromRGBO(247, 247, 247, 1.000),
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {},
+                  color: Color.fromARGB(255, 0, 178, 178),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                      // bottomLeft: Radius.circular(10),
+                    ),
+                    color: Color.fromARGB(255, 249, 85, 20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 14),
+                    child: Text(
+                      'RM ${product.price}',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )),
             ),
           ],
         ),
