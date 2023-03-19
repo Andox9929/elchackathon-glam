@@ -3,19 +3,21 @@
 
 title('Ecommerce Command')
 
-const products = {
+/* const products = {
     "lipstick": [
         {
             id: "loreal_lipstick_red", 
             name: "Color Riche Lipstick Matte Red", 
             price: 15.00, 
+            keywords: ["lipstick", "red"],
             description: "Indulge in a smooth, long-lasting formula. with 29 shades of matte lipsticks from color riche now in a new packaging.", 
             brand: "L'Oréal"
         },
         {
             id: "el_lipstick_red",
-            name: "Estee Lauder Lipstick Red", 
+            name: "Estee Lauder Red Lipstick", 
             price: 30.00, 
+            keywords: ["lipstick", "red"],
             description: "A Red Lipstick from Estee Lauder", 
             brand: 'Estee Lauder',
             image: 'el_lipstick_red.jpg',
@@ -24,13 +26,15 @@ const products = {
             id: "loreal_lipstick_cherry", 
             name: "Color Riche Lipstick Matte Cherry", 
             price: 15.00, 
+            keywords: ["lipstick", "cherry"],
             description: "Indulge in a smooth, long-lasting formula. with 29 shades of matte lipsticks from color riche now in a new packaging.", 
             brand: "L'Oréal"
         },
         {
             id: "es_lipstick_pink",
-            name: "Estee Lauder Lipstick Pink", 
+            name: "Estee Lauder Pink Lipstick", 
             price: 30.00,
+            keywords: ["lipstick", "pink"],
             description: "A Pink Lipstick from Estee Lauder", 
             brand: 'Estee Lauder',
             image: 'el_lipstick_pink.jpg',
@@ -52,11 +56,28 @@ const products = {
             brand: "L'Oréal"
         },
     ],
-};
+}; */
 
-const PRODUCT_CAT = Object.keys(products).join("|");
-const PRODUCT = Object.values(products).flat().map(product => product.name).join("|");
-const BRAND = [... new Set(Object.values(products).flat().map(product => product.brand))].join("|");
+// const PRODUCT_CAT = Object.keys(products).join("|");
+// const PRODUCT = Object.values(products).flat().map(product => product.name).join("|");
+// const BRAND = [... new Set(Object.values(products).flat().map(product => product.brand))].join("|");
+
+const KEYWORDS = [
+    "lipstick",
+    "red",
+    "purple",
+    "pigment",
+].join('|');
+
+const PRODUCT_IDS = [
+    "SL1",
+    "CH1",
+    "DO1",
+    "MC1",
+    "MB1",
+    "DO2",
+];
+
 // Search product
 // intent(
 //     '(I would like to view|Search) (for|) $(PRODUCT)',
@@ -67,23 +88,40 @@ const BRAND = [... new Set(Object.values(products).flat().map(product => product
 // )
 
 intent(`(Open|Go to) cart`, p => {
-    p.play({command: 'navigation', route: '/cart'});
+    p.play({
+        command: 'navigation',
+        route: '/cart'
+    });
     p.play(`Here is your cart`);
 });
 
+intent(
+    `Proceed to checkout page`,
+    p => {
+        p.play({
+            command: 'navigation',
+            route: '/cart',
+        });
+        p.play(`Here is your checkout page`);
+    }
+)
+
 intent(`(Open|Go to|Back to) (home|homepage|main page)`, p => {
-    p.play({command: 'navigation', route: '/home'});
+    p.play({
+        command: 'navigation',
+        route: '/home'
+    });
     p.play(`(This is your homepage|Here you go)`);
 });
 
 intent(
-    `Search for $(P ${PRODUCT_CAT})`,
+    `Search for $(P ${KEYWORDS})`,
     p => {
         let selectedProducts = products[p.P.value.toLowerCase()];
         p.play({
-            command:'navigation', 
-            route: '/search',  
-            data: p.P.value, 
+            command: 'navigation',
+            route: '/search',
+            data: p.P.value,
             products: JSON.stringify(selectedProducts)
         });
         p.play(`Here is the search result of ${p.P}`);
@@ -91,25 +129,56 @@ intent(
 );
 
 intent(
-    `(I want to|) (See|Check) $(P ${PRODUCT})`,
+    `(I want to|) (See|Check) $(P ${PRODUCT_IDS})`,
     p => {
-        let selectedProduct = Object.values(products).flatMap(arr => arr).find(p1 => p1.name.toLowerCase() === p.P.value.toLowerCase());
         p.play({
-            command:'navigation', 
-            route: '/product', 
-            data: p.P.value, 
-            product: JSON.stringify(selectedProduct)
+            command: 'navigation',
+            route: '/product',
+            data: p.P.value(),
         });
-        p.play(`Here is the search result of ${p.P}`);
+        p.play(`Here you go ${p.P}`);
     }
 );
 
 intent(
-    `Start App`,
+    `Add $(P ${PRODUCT_IDS}) to cart`,
     p => {
         p.play({
-            command:'startApp'
+            command: 'addToCart',
+            data: p.P.value(),
         });
-        p.play('Hi I am Alan. What can I help you.');
+        p.play(`Added to cart.`);
     }
-);
+)
+
+intent(
+    `Buy now`,
+    p => {
+        p.play({
+            command: 'buyNow',
+        });
+        p.play(`Going to checkout page`);
+    }
+)
+
+intent(
+    `(Continue|) checkout`,
+    p => {
+        p.play({
+            command: 'navigation',
+            route: '/addAddress',
+        });
+        p.play(`You need to fill in your shipping address to proceed checkout`);
+    }
+)
+
+intent(
+    `(Confirm|Go to|) payment`,
+    p => {
+        p.play({
+            command: 'navigation',
+            route: '/payment',
+        });
+        p.play(`Processing Payment`);
+    }
+)

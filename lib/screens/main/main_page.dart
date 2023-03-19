@@ -13,6 +13,7 @@ import 'package:ecommerce_int2/screens/product/product_page.dart';
 import 'package:ecommerce_int2/screens/product/view_product_page.dart';
 import 'package:ecommerce_int2/screens/profile_page.dart';
 import 'package:ecommerce_int2/screens/search_page.dart';
+import 'package:ecommerce_int2/screens/search_result_page.dart';
 import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -58,7 +59,7 @@ class _MainPageState extends State<MainPage>
               String searchText = command["data"];
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => SearchPage(
+                  builder: (_) => SearchResultPage(
                     search: searchText,
                   ),
                 ),
@@ -66,7 +67,6 @@ class _MainPageState extends State<MainPage>
               break;
             case "/product":
               String searchText = command["data"];
-              print("Output>>> haha $searchText");
               Product selectedProduct = products
                   .where((element) =>
                       element.id.toUpperCase() == searchText.toUpperCase())
@@ -155,7 +155,7 @@ class _MainPageState extends State<MainPage>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("main"));
     tabController = TabController(length: 5, vsync: this);
-    bottomTabController = TabController(length: 4, vsync: this);
+    bottomTabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -186,12 +186,12 @@ class _MainPageState extends State<MainPage>
     Widget appBar = Container(
       height: kToolbarHeight + MediaQuery.of(context).padding.top,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          IconButton(
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => NotificationsPage())),
-              icon: Icon(Icons.notifications)),
+          // IconButton(
+          //     onPressed: () => Navigator.of(context)
+          //         .push(MaterialPageRoute(builder: (_) => NotificationsPage())),
+          //     icon: Icon(Icons.notifications)),
           IconButton(
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => SearchPage())),
@@ -272,7 +272,7 @@ class _MainPageState extends State<MainPage>
       controller: tabController,
     );*/
     return Scaffold(
-      bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
+      // bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
       body: CustomPaint(
         painter: MainBackground(),
         child: TabBarView(
@@ -306,7 +306,7 @@ class _MainPageState extends State<MainPage>
                 ),
               ),
             ),
-            CategoryListPage(),
+            // CategoryListPage(),
             CheckOutPage(),
             ProfilePage()
           ],
