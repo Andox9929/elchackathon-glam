@@ -67,7 +67,26 @@ const KEYWORDS = [
     "red",
     "purple",
     "pigment",
-].join('|');
+];
+
+function generateKeywordCombinations(keywords) {
+  const result = [];
+
+  for (let i = 0; i < keywords.length; i++) {
+    for (let j = i + 1; j < keywords.length; j++) {
+      result.push(`${keywords[i]} ${keywords[j]}`);
+      result.push(`${keywords[j]} ${keywords[i]}`);
+    }
+  }
+
+  for (let i = 0; i < keywords.length; i++) {
+    result.push(keywords[i]);
+  }
+
+  return result;
+}
+
+const KEYWORD_COMBINATIONS = generateKeywordCombinations(KEYWORDS).join('|');
 
 const PRODUCT_IDS = [
     "SL1",
@@ -76,7 +95,18 @@ const PRODUCT_IDS = [
     "MC1",
     "MB1",
     "DO2",
-];
+].join('|');
+
+// Screen
+const mainScreen = visual(state => state.screen === "main");
+const searchScreen = visual(state => state.screen === "search");
+const viewProductScreen = visual(state => state.screen === "view_product");
+const checkoutScreen = visual(state => state.screen === "checkout");
+
+function isScreen(screen) {
+    visual(state => console.log(state.screen));
+    return visual(state => state.screen === screen);
+}
 
 // Search product
 // intent(
@@ -109,14 +139,12 @@ intent(`(Open|Go to|Back to) (home|homepage|main page)`, p => {
 });
 
 intent(
-    `Search for $(P ${KEYWORDS})`,
+    `Search for $(P ${KEYWORD_COMBINATIONS})`,
     p => {
-        let selectedProducts = products[p.P.value.toLowerCase()];
         p.play({
             command:'navigation', 
             route: '/search',  
             data: p.P.value, 
-            products: JSON.stringify(selectedProducts)
         });
         p.play(`Here is the search result of ${p.P}`);
     }
@@ -128,13 +156,14 @@ intent(
         p.play({
             command:'navigation', 
             route: '/product', 
-            data: p.P.value(), 
+            data: p.P.value, 
         });
         p.play(`Here you go ${p.P}`);
     }
 );
 
 intent(
+    isScreen('view_product'),
     `Add (this product|) to cart`,
     p => {
         p.play({
@@ -145,6 +174,7 @@ intent(
 )
 
 intent(
+    isScreen('view_product'),
     `Buy now`,
     p => {
         p.play({
@@ -155,6 +185,7 @@ intent(
 )
 
 intent(
+    isScreen('checkout'),
     `(Continue|) checkout`,
     p => {
         p.play({
@@ -166,6 +197,7 @@ intent(
 )
 
 intent(
+    isScreen('address') || isScreen('checkout'),
     `(Confirm|Go to|) payment`,
     p => {
         p.play({
