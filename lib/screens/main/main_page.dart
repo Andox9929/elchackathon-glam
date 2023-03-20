@@ -20,7 +20,7 @@ import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'components/custom_bottom_bar.dart';
-import 'components/product_list.dart';
+import 'components/product_suggest.dart';
 import 'components/tab_view.dart';
 import 'package:alan_voice/alan_voice.dart';
 import '../../data/product_data.dart' as _productData;
@@ -324,22 +324,48 @@ class _MainPageState extends State<MainPage>
               child: NestedScrollView(
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
-                  // These are the slivers that show up in the "outer" scroll view.
                   return <Widget>[
                     SliverToBoxAdapter(
                       child: appBar,
                     ),
-                    // SliverToBoxAdapter(
-                    //   child: topHeader,
-                    // ),
                     SliverToBoxAdapter(
-                      child: ProductList(
+                      child: Container(
+                        padding: EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Hello",
+                              style: TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 16.0),
+                            Text(
+                              "What a great day to shopping!",
+                              style: TextStyle(
+                                fontSize: 38.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 70.0),
+                            Text(
+                              "You may also like",
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: ProductSuggest(
                         products: products,
                       ),
                     ),
-                    // SliverToBoxAdapter(
-                    //   child: tabBar,
-                    // )
                   ];
                 },
                 body: TabView(
