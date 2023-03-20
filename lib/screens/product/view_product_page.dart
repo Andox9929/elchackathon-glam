@@ -108,19 +108,24 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                        color: Colors.white,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        'Description',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
+                      padding:
+                          const EdgeInsets.only(top: 10.0, left: 10, right: 10),
                       child: Text(
                         widget.product.description,
                         maxLines: 5,
+                        // textAlign: TextAlign.justify,
                         semanticsLabel: '...',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Colors.white),
@@ -149,7 +154,7 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
                         vertical: 14,
                       ),
                       child: Text(
-                        'RM ${widget.product.price}',
+                        'RM ${widget.product.price.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -172,15 +177,12 @@ class _ViewProductPageState extends State<ViewProductPage> with RouteAware {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 65,
+                          horizontal: 55,
                           vertical: 25,
                         ),
                         child: Text('Buy Now'),
                       ),
                     ),
-                  ]),
-                ), */
-                // MoreProducts()
                   ),
                 ),
               ],
