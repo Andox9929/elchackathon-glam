@@ -134,12 +134,13 @@ class ProductCard extends StatelessWidget {
                       // bottomLeft: Radius.circular(10),
                     ),
                     color: Color.fromARGB(255, 249, 85, 20),
+                    // color: yellow,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 14),
                     child: Text(
-                      'RM ${product.price}',
+                      'RM ${product.price.toStringAsFixed(2)}',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,

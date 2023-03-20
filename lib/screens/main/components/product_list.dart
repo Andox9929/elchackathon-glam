@@ -144,6 +144,7 @@ class ProductCard extends StatelessWidget {
               left: 0,
               bottom: 0,
               child: Container(
+                height: 45,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(10),
@@ -160,19 +161,44 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             Positioned(
-                right: 0,
-                bottom: 0,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                  child: Text(
-                    'RM ${product.price}',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+              right: 0,
+              bottom: 0,
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                      // bottomLeft: Radius.circular(10),
+                    ),
+                    color: Color.fromARGB(255, 249, 85, 20),
+                    // color: yellow,
                   ),
-                )),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 14),
+                    child: Text(
+                      'RM ${product.price.toStringAsFixed(2)}',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )),
+            ),
+            // Positioned(
+            //     right: 0,
+            //     bottom: 0,
+            //     child: Padding(
+            //       padding:
+            //           const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            //       child: Text(
+            //         'RM ${product.price.toStringAsFixed(2)}',
+            //         style: TextStyle(
+            //             color: Colors.white,
+            //             fontSize: 18,
+            //             fontWeight: FontWeight.bold),
+            //       ),
+            //     )),
           ],
         ),
       ),

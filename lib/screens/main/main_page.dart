@@ -335,7 +335,7 @@ class _MainPageState extends State<MainPage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Hello",
+                              "Hello Leong,",
                               style: TextStyle(
                                 fontSize: 30.0,
                                 fontWeight: FontWeight.bold,

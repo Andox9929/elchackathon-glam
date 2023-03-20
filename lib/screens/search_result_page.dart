@@ -78,7 +78,7 @@ class _SearchResultPageState extends State<SearchResultPage> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        backgroundColor: yellow,
+        backgroundColor: Color(0xFFF5EBEB),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -87,7 +87,7 @@ class _SearchResultPageState extends State<SearchResultPage> with RouteAware {
             IconButton(
               icon: Icon(
                 Icons.search,
-                color: Colors.white,
+                color: Colors.black,
               ),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => SearchPage())),
@@ -96,7 +96,7 @@ class _SearchResultPageState extends State<SearchResultPage> with RouteAware {
           title: Text(
             widget.search,
             style: const TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.w500,
                 fontFamily: "Montserrat",
                 fontSize: 18.0),
