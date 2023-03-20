@@ -43,8 +43,13 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             ),
             SizedBox(height: 20),
             Text(
-              '\$500',
+              'RM 160.00',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'You have earned 1600 Points.',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 40),
             Text(
@@ -58,14 +63,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PaymentSuccessPage(
-                      transactionId: "123",
-                    ),
-                  ),
-                );
+                //
               },
               style: ElevatedButton.styleFrom(
                 primary: yellow,
@@ -79,7 +77,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 250),
+            SizedBox(height: 100),
           ],
         ),
       ),

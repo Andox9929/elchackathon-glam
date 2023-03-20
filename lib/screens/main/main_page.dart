@@ -9,6 +9,7 @@ import 'package:ecommerce_int2/screens/address/add_address_page.dart';
 import 'package:ecommerce_int2/screens/category/category_list_page.dart';
 import 'package:ecommerce_int2/screens/notifications_page.dart';
 import 'package:ecommerce_int2/screens/payment/payment_page.dart';
+import 'package:ecommerce_int2/screens/payment/payment_success.dart';
 import 'package:ecommerce_int2/screens/product/components/shop_bottomSheet.dart';
 import 'package:ecommerce_int2/screens/product/product_page.dart';
 import 'package:ecommerce_int2/screens/product/view_product_page.dart';
@@ -70,10 +71,18 @@ class _MainPageState extends State<MainPage>
               break;
             case "/product":
               String searchText = command["data"];
-              Product selectedProduct = products
-                  .where((element) =>
-                      element.name.toUpperCase() == searchText.toUpperCase())
-                  .first;
+              Product selectedProduct = _productData.getProduct("DO2");
+              if (command["type"] == 'id') {
+                selectedProduct = products
+                    .where((element) =>
+                        element.id.toUpperCase() == searchText.toUpperCase())
+                    .first;
+              } else {
+                selectedProduct = products
+                    .where((element) =>
+                        element.name.toUpperCase() == searchText.toUpperCase())
+                    .first;
+              }
               print("Output>>> ${selectedProduct.name}");
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -101,6 +110,15 @@ class _MainPageState extends State<MainPage>
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => PaymentPage(),
+                ),
+              );
+              break;
+            case "/paymentSuccess":
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PaymentSuccessPage(
+                    transactionId: "2023030007",
+                  ),
                 ),
               );
               break;
@@ -294,6 +312,7 @@ class _MainPageState extends State<MainPage>
       controller: tabController,
     );*/
     return Scaffold(
+      backgroundColor: Colors.transparent,
       bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
       body: CustomPaint(
         painter: MainBackground(),

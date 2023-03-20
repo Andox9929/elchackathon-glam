@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/address/address_form.dart';
 import 'package:ecommerce_int2/screens/payment/payment_page.dart';
@@ -12,7 +13,7 @@ class AddAddressPage extends StatefulWidget {
   _AddAddressPageState createState() => _AddAddressPageState();
 }
 
-class _AddAddressPageState extends State<AddAddressPage> {
+class _AddAddressPageState extends State<AddAddressPage> with RouteAware {
   File? _image;
   InputImage? inputImage;
   final picker = ImagePicker();
@@ -88,10 +89,32 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("address"));
+    super.initState();
+  }
+
+  @override
+  void didPush() {
+    setVisuals('address');
+  }
+
+  @override
+  void didPop() {
+    setVisuals('checkout');
+  }
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget finishButton = InkWell(
       onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => SelectCardPage())),
+          .push(MaterialPageRoute(builder: (_) => PaymentPage())),
       child: Container(
         height: 80,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -106,7 +129,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             ],
             borderRadius: BorderRadius.circular(9.0)),
         child: Center(
-          child: Text("Finish",
+          child: Text("Next",
               style: const TextStyle(
                   color: const Color(0xfffefefe),
                   fontWeight: FontWeight.w600,
@@ -163,7 +186,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             ],
             borderRadius: BorderRadius.circular(9.0)),
         child: Center(
-          child: Text("Scan Card",
+          child: Text("Scan Address",
               style: const TextStyle(
                   color: const Color(0xfffefefe),
                   fontWeight: FontWeight.w600,

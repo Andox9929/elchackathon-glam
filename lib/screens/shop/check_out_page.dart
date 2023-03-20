@@ -23,7 +23,15 @@ class _CheckOutPageState extends State<CheckOutPage> with RouteAware {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("checkout"));
+    super.initState();
+  }
+
+  @override
   void didPush() {
+    print("Output>>> PUSHED");
     setVisuals('checkout');
   }
 
