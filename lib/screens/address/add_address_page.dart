@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/address/address_form.dart';
@@ -35,10 +36,23 @@ class _AddAddressPageState extends State<AddAddressPage> with RouteAware {
         _image = File(pickedFile.path);
         inputImage = InputImage.fromFilePath(pickedFile.path);
         final recognizedText = await _textDetector.processImage(inputImage!);
-        final text = recognizedText.text;
-
+        final text = recognizedText.blocks;
+        print("Output>>> ${text.length}");
         setState(() {
-          Navigator.pop(context);
+          for (TextBlock block in text) {
+            final String rect = block.text;
+            final List<Point<int>> cornerPoints = block.cornerPoints;
+            final String text = block.text;
+            final List<String> languages = block.recognizedLanguages;
+
+            for (TextLine line in block.lines) {
+              // Same getters as TextBlock
+              for (TextElement element in line.elements) {
+                // Same getters as TextBlock
+                print("Output>>> $element");
+              }
+            }
+          }
           if (text.isNotEmpty) {
             addressNameController.text = "Ahmed bin Ghazili";
             addressController.text = "75 Kg Sg Ramal Luar";
@@ -47,6 +61,7 @@ class _AddAddressPageState extends State<AddAddressPage> with RouteAware {
             addressStateController.text = "Selangor";
             addressCountryController.text = "Malaysia";
           }
+          Navigator.pop(context);
         });
       } catch (e) {
         print(e);
@@ -64,19 +79,30 @@ class _AddAddressPageState extends State<AddAddressPage> with RouteAware {
         _image = File(pickedFile.path);
         inputImage = InputImage.fromFilePath(pickedFile.path);
         final recognizedText = await _textDetector.processImage(inputImage!);
-        final text = recognizedText.text;
-
+        final blocks = recognizedText.blocks;
+        int i = 0;
         setState(() {
-          Navigator.pop(context);
-
-          if (text.isNotEmpty) {
-            addressNameController.text = "Ahmed bin Ghazili";
-            addressController.text = "75 Kg Sg Ramal Luar";
-            addressPostcodeController.text = "43000";
-            addressCityController.text = "Kajang";
-            addressStateController.text = "Selangor";
-            addressCountryController.text = "Malaysia";
+          String text = recognizedText.text;
+          for (TextBlock block in recognizedText.blocks) {
+            print("Output>>> ${block.lines.length}");
+            for (TextLine line in block.lines) {
+              // Same getters as TextBlock
+              print("Output>>> ${line.text}");
+              if (i == 0) {
+                addressNameController.text = line.text;
+              } else if (i == 1) {
+                addressController.text = line.text;
+              } else if (i == 2) {
+                addressPostcodeController.text = line.text.split(" ").first;
+                addressCityController.text = line.text.split(" ").last;
+              } else if (i == 3) {
+                addressStateController.text = line.text.split(", ").first;
+                addressCountryController.text = line.text.split(", ").last;
+              }
+              i += 1;
+            }
           }
+          Navigator.pop(context);
         });
       } catch (e) {
         print(e);

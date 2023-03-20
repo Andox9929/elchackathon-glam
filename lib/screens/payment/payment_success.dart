@@ -13,6 +13,8 @@ class PaymentSuccessPage extends StatefulWidget {
 }
 
 class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
+  String points = "1600";
+  double price = 160.00;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,12 +45,12 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             ),
             SizedBox(height: 20),
             Text(
-              'RM 160.00',
+              'RM ${price.toStringAsFixed(2)}',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Text(
-              'You have earned 1600 Points.',
+              'You have earned $points Points.',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 40),

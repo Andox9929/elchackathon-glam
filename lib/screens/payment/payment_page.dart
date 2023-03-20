@@ -119,19 +119,38 @@ class _PaymentPageState extends State<PaymentPage> with RouteAware {
         final recognizedText = await _textDetector.processImage(inputImage!);
         final text = recognizedText.text;
 
-        // final hasCreditCard = creditCardRegex.hasMatch(text);
-        if (recognizedText.text.isNotEmpty) {
-          counter += 1;
+        final hasCreditCard = creditCardRegex.hasMatch(text);
+        if (hasCreditCard) {
+          int i = 0;
           setState(() {
-            if (counter == 1) {
-              cardHolder.text = "LEONG MAN HIN";
-            } else {
-              cardNumber.text = "5178 0163 0035 0205";
-              month.text = "03";
-              year.text = "27";
-              cvc.text = "824";
+            String text = recognizedText.text;
+            for (TextBlock block in recognizedText.blocks) {
+              print("Output>>> ${block.lines.length}");
+              for (TextLine line in block.lines) {
+                // Same getters as TextBlock
+                print("Output>>> ${line.text}");
+                if (i == 0) {
+                  cardHolder.text = line.text;
+                } else if (i == 1) {
+                  cardNumber.text = line.text;
+                } else if (i == 2) {
+                  month.text = line.text.split("/").first;
+                  year.text = line.text.split("/").last;
+                } else if (i == 3) {
+                  cvc.text = line.text;
+                }
+                i += 1;
+              }
             }
-            Navigator.of(context).pop();
+            Navigator.pop(context);
+            // setState(() {
+            //     cardHolder.text = "LEONG MAN HIN";
+            //     cardNumber.text = "5178 0163 0035 0205";
+            //     month.text = "03";
+            //     year.text = "27";
+            //     cvc.text = "824";
+            //   Navigator.of(context).pop();
+            // });
           });
         }
       } catch (e) {
