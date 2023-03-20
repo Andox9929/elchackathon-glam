@@ -52,7 +52,8 @@ class ProductOption extends StatelessWidget {
                             shadows: shadow)),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 30),
+                    padding:
+                        const EdgeInsets.only(left: 40, top: 10, bottom: 10),
                     child: Text(product.name,
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -61,7 +62,7 @@ class ProductOption extends StatelessWidget {
                             color: Colors.white,
                             shadows: shadow)),
                   ),
-                  InkWell(
+                  /* InkWell(
                     onTap: () async {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => CheckOutPage()));
@@ -112,20 +113,11 @@ class ProductOption extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
+                  )*/
                 ],
               ),
             ),
           ),
-          Positioned(
-            left: 0,
-            bottom: 0,
-            child: Divider(
-              thickness: 1,
-              color: Colors.white,
-              height: 10,
-            ),
-          )
         ],
       ),
     );

@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage>
               String searchText = command["data"];
               Product selectedProduct = products
                   .where((element) =>
-                      element.id.toUpperCase() == searchText.toUpperCase())
+                      element.name.toUpperCase() == searchText.toUpperCase())
                   .first;
               print("Output>>> ${selectedProduct.name}");
               Navigator.of(context).push(
