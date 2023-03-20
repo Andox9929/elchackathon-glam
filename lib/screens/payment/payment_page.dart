@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:alan_voice/alan_voice.dart';
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:ecommerce_int2/screens/payment/payment_success.dart';
 import 'package:ecommerce_int2/screens/product/components/color_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +16,7 @@ class PaymentPage extends StatefulWidget {
   _PaymentPageState createState() => _PaymentPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _PaymentPageState extends State<PaymentPage> with RouteAware {
   Color active = Colors.red;
   TextEditingController cardNumber = TextEditingController();
   TextEditingController year = TextEditingController();
@@ -23,6 +25,23 @@ class _PaymentPageState extends State<PaymentPage> {
   TextEditingController cardHolder = TextEditingController();
 
   ScrollController scrollController = ScrollController();
+
+  int counter = 0;
+
+  @override
+  void didPush() {
+    setVisuals('payment');
+  }
+
+  @override
+  void didPop() {
+    setVisuals('address');
+  }
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
+  }
 
   @override
   void initState() {
@@ -33,6 +52,7 @@ class _PaymentPageState extends State<PaymentPage> {
         FocusScope.of(context).requestFocus(FocusNode());
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("payment"));
   }
 
   String convertCardNumber(String src, String divider) {
@@ -99,18 +119,21 @@ class _PaymentPageState extends State<PaymentPage> {
         final recognizedText = await _textDetector.processImage(inputImage!);
         final text = recognizedText.text;
 
-        final hasCreditCard = creditCardRegex.hasMatch(text);
-
-        setState(() {
-          if (hasCreditCard) {
-            cardNumber.text = "1234567890121234";
-            year.text = "23";
-            month.text = "01";
-            cardHolder.text = "Brandon";
-          } else {
-            cvc.text = "123";
-          }
-        });
+        // final hasCreditCard = creditCardRegex.hasMatch(text);
+        if (recognizedText.text.isNotEmpty) {
+          counter += 1;
+          setState(() {
+            if (counter == 1) {
+              cardHolder.text = "LEONG MAN HIN";
+            } else {
+              cardNumber.text = "5178 0163 0035 0205";
+              month.text = "03";
+              year.text = "27";
+              cvc.text = "824";
+            }
+            Navigator.of(context).pop();
+          });
+        }
       } catch (e) {
         print(e);
       }
@@ -127,6 +150,11 @@ class _PaymentPageState extends State<PaymentPage> {
       await prefs.setString('month', month.text);
       await prefs.setString('cardHolder', cardHolder.text);
       await prefs.setString('cvc', cvc.text);
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => PaymentSuccessPage(
+                transactionId: "2023030007",
+              )));
     } catch (e) {
       print('Error saving data to SharedPreferences: $e');
     }
@@ -160,7 +188,7 @@ class _PaymentPageState extends State<PaymentPage> {
             ],
             borderRadius: BorderRadius.circular(9.0)),
         child: Center(
-          child: Text("Add This Card",
+          child: Text("Pay",
               style: const TextStyle(
                   color: const Color(0xfffefefe),
                   fontWeight: FontWeight.w600,
@@ -362,6 +390,23 @@ class _PaymentPageState extends State<PaymentPage> {
                               color: Colors.grey[200],
                             ),
                             child: TextField(
+                              controller: cardHolder,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Name on card'),
+                              onChanged: (val) {
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: Colors.grey[200],
+                            ),
+                            child: TextField(
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(16)
                               ],
@@ -446,23 +491,6 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ),
                               )
                             ],
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 16.0),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              color: Colors.grey[200],
-                            ),
-                            child: TextField(
-                              controller: cardHolder,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Name on card'),
-                              onChanged: (val) {
-                                setState(() {});
-                              },
-                            ),
                           ),
                         ],
                       ),
