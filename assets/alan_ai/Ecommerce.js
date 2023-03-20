@@ -67,7 +67,26 @@ const KEYWORDS = [
     "red",
     "purple",
     "pigment",
-].join('|');
+];
+
+function generateKeywordCombinations(keywords) {
+  const result = [];
+
+  for (let i = 0; i < keywords.length; i++) {
+    for (let j = i + 1; j < keywords.length; j++) {
+      result.push(`${keywords[i]} ${keywords[j]}`);
+      result.push(`${keywords[j]} ${keywords[i]}`);
+    }
+  }
+
+  for (let i = 0; i < keywords.length; i++) {
+    result.push(keywords[i]);
+  }
+
+  return result;
+}
+
+const KEYWORD_COMBINATIONS = generateKeywordCombinations(KEYWORDS).join('|');
 
 const PRODUCT_IDS = [
     "SL1",
@@ -76,7 +95,22 @@ const PRODUCT_IDS = [
     "MC1",
     "MB1",
     "DO2",
-];
+].join('|');
+
+const PRODUCT_NAMES = [
+    "Dior Poison"
+].join("|");
+
+// Screen
+const mainScreen = visual(state => state.screen === "main");
+const searchScreen = visual(state => state.screen === "search");
+const viewProductScreen = visual(state => state.screen === "view_product");
+const checkoutScreen = visual(state => state.screen === "checkout");
+
+function isScreen(screen) {
+    visual(state => console.log(state.screen));
+    return visual(state => state.screen === screen);
+}
 
 // Search product
 // intent(
@@ -86,6 +120,10 @@ const PRODUCT_IDS = [
 //         p.play(`Here is your search result of ${p.PRODUCT.value}.`);
 //     }
 // )
+
+intent(`Get Started`, p => {
+    p.play({command: 'getStarted'});
+});
 
 intent(`(Open|Go to) cart`, p => {
     p.play({
@@ -115,26 +153,24 @@ intent(`(Open|Go to|Back to) (home|homepage|main page)`, p => {
 });
 
 intent(
-    `Search for $(P ${KEYWORDS})`,
+    `Search (for|) $(P ${KEYWORD_COMBINATIONS})`,
     p => {
-        let selectedProducts = products[p.P.value.toLowerCase()];
         p.play({
-            command: 'navigation',
-            route: '/search',
-            data: p.P.value,
-            products: JSON.stringify(selectedProducts)
+            command:'navigation', 
+            route: '/search',  
+            data: p.P.value, 
         });
         p.play(`Here is the search result of ${p.P}`);
     }
 );
 
 intent(
-    `(I want to|) (See|Check) $(P ${PRODUCT_IDS})`,
+    `(I want to|) (See|Check|View) $(P ${PRODUCT_NAMES})`,
     p => {
         p.play({
-            command: 'navigation',
-            route: '/product',
-            data: p.P.value(),
+            command:'navigation', 
+            route: '/product', 
+            data: p.P.value, 
         });
         p.play(`Here you go ${p.P}`);
     }
@@ -147,11 +183,13 @@ intent(
             command: 'addToCart',
             data: p.P.value(),
         });
-        p.play(`Added to cart.`);
+//         p.play(`Added to cart. Do you want to proceed to checkout page or continue shopping?`);
+        p.play(`Successfully added to cart.`);
     }
 )
 
 intent(
+    isScreen('view_product'),
     `Buy now`,
     p => {
         p.play({
@@ -162,7 +200,7 @@ intent(
 )
 
 intent(
-    `(Continue|) checkout`,
+    `(Continue|) (checkout|check out)`,
     p => {
         p.play({
             command: 'navigation',
@@ -173,6 +211,7 @@ intent(
 )
 
 intent(
+    isScreen('address') || isScreen('checkout'),
     `(Confirm|Go to|) payment`,
     p => {
         p.play({
