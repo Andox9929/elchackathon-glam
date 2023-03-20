@@ -33,7 +33,7 @@ dependencies:
   intl: ^0.17.0
   numberpicker: ^2.1.1
   flare_splash_screen: ^4.0.0
-  flutter_svg: ^0.23.0+1
+  flutter_svg: ^2.0.4
   modal_bottom_sheet: ^2.0.0
   alan_voice: ^3.11.0
   # modal_bottom_sheet:

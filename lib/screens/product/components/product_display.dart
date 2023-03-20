@@ -2,6 +2,7 @@ import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/product.dart';
 import 'package:ecommerce_int2/screens/rating/rating_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductDisplay extends StatelessWidget {
   final Product product;
@@ -66,7 +67,7 @@ class ProductDisplay extends StatelessWidget {
                     child: Container(
                       child: Hero(
                         tag: product.image,
-                        child: Image.asset(
+                        child: SvgPicture.asset(
                           product.image,
                           fit: BoxFit.contain,
                           height: 230,

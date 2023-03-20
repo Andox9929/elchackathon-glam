@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:ecommerce_int2/app_properties.dart';
@@ -13,6 +14,7 @@ import 'package:ecommerce_int2/screens/product/product_page.dart';
 import 'package:ecommerce_int2/screens/product/view_product_page.dart';
 import 'package:ecommerce_int2/screens/profile_page.dart';
 import 'package:ecommerce_int2/screens/search_page.dart';
+import 'package:ecommerce_int2/screens/search_result_page.dart';
 import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,6 +32,7 @@ class MainPage extends StatefulWidget {
 List<String> timelines = ['Weekly featured', 'Best of June', 'Best of 2018'];
 String selectedTimeline = 'Weekly featured';
 List<Product> products = _productData.getProducts();
+Timer _timer = new Timer(Duration.zero, () {});
 
 class _MainPageState extends State<MainPage>
     with TickerProviderStateMixin<MainPage>, RouteAware {
@@ -39,6 +42,7 @@ class _MainPageState extends State<MainPage>
   _MainPageState() {
     void _handleCommand(Map<String, dynamic> command) {
       print('Start handle Command');
+      print("Output>>> $command");
 
       switch (command["command"]) {
         case "navigation":
@@ -58,7 +62,7 @@ class _MainPageState extends State<MainPage>
               String searchText = command["data"];
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => SearchPage(
+                  builder: (_) => SearchResultPage(
                     search: searchText,
                   ),
                 ),
@@ -67,8 +71,10 @@ class _MainPageState extends State<MainPage>
             case "/product":
               String searchText = command["data"];
               Product selectedProduct = products
-                  .where((element) => element.name.toLowerCase() == searchText)
+                  .where((element) =>
+                      element.name.toUpperCase() == searchText.toUpperCase())
                   .first;
+              print("Output>>> ${selectedProduct.name}");
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ViewProductPage(
@@ -100,12 +106,33 @@ class _MainPageState extends State<MainPage>
               break;
           }
           break;
+        case 'getStarted':
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => MainPage(),
+          ));
+          break;
         case 'addToCart':
-          final GlobalKey<ScaffoldState> _scaffoldKey =
-              new GlobalKey<ScaffoldState>();
-          _scaffoldKey.currentState!.showBottomSheet((context) {
-            return ShopBottomSheet();
-          });
+          // showDialog(
+          //     context: context,
+          //     builder: (BuildContext builderContext) {
+          //       _timer = Timer(Duration(seconds: 2), () {
+          //         Navigator.of(context).pop();
+          //       });
+
+          //       return AlertDialog(
+          //         backgroundColor: Colors.red,
+          //         title: Text('Title'),
+          //         content: SingleChildScrollView(
+          //           child: Text('Added to Cart'),
+          //         ),
+          //       );
+          //     }).then((val) {
+          //   if (_timer.isActive) {
+          //     _timer.cancel();
+          //   }
+          // });
+          final snackBar = SnackBar(content: Text("Items added to cart"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
           break;
         case 'buyNow':
           Navigator.of(context).push(
@@ -117,16 +144,29 @@ class _MainPageState extends State<MainPage>
       }
     }
 
-    /// Init Alan Button with project key from Alan Studio
-    AlanVoice.addButton(
-      "7e8c76af5acb0245cbf3c098c789d13a2e956eca572e1d8b807a3e2338fdd0dc/stage",
-    );
+    void _checkIsActive() async {
+      var isActive = await AlanVoice.isActive();
+      if (isActive) {
+        print("Output>>> IS ACTIVE");
+        // AlanVoice.showButton();
+      } else {
+        print("Output>>> IS NOT ACTIVE");
+        // AlanVoice.hideButton();
+      }
+    }
 
     /// Handle commands from Alan Studio
     AlanVoice.onCommand.add((command) {
-      debugPrint("got new command ${command.toString()}");
+      debugPrint("Output>>> got new command ${command.toString()}");
       _handleCommand(command.data);
     });
+
+    AlanVoice.eventCallbacks.add((command) {
+      debugPrint("Output>>> eventCallbacks");
+      // _checkIsActive();
+    });
+
+    AlanVoice.activate();
   }
 
   @override
@@ -134,7 +174,10 @@ class _MainPageState extends State<MainPage>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("main"));
     tabController = TabController(length: 5, vsync: this);
-    bottomTabController = TabController(length: 4, vsync: this);
+    bottomTabController = TabController(length: 3, vsync: this);
+
+    // Welcome message
+    // AlanVoice.playText("Welcome to Glam");
   }
 
   @override
@@ -165,12 +208,12 @@ class _MainPageState extends State<MainPage>
     Widget appBar = Container(
       height: kToolbarHeight + MediaQuery.of(context).padding.top,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          IconButton(
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => NotificationsPage())),
-              icon: Icon(Icons.notifications)),
+          // IconButton(
+          //     onPressed: () => Navigator.of(context)
+          //         .push(MaterialPageRoute(builder: (_) => NotificationsPage())),
+          //     icon: Icon(Icons.notifications)),
           IconButton(
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => SearchPage())),
@@ -189,32 +232,7 @@ class _MainPageState extends State<MainPage>
                 onTap: () {
                   setState(() {
                     selectedTimeline = timelines[0];
-                    products = [
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                    ];
+                    products = _productData.getProducts();
                   });
                 },
                 child: Text(
@@ -230,32 +248,7 @@ class _MainPageState extends State<MainPage>
                 onTap: () {
                   setState(() {
                     selectedTimeline = timelines[1];
-                    products = [
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                    ];
+                    products = _productData.getProducts();
                   });
                 },
                 child: Text(timelines[1],
@@ -270,32 +263,7 @@ class _MainPageState extends State<MainPage>
                 onTap: () {
                   setState(() {
                     selectedTimeline = timelines[2];
-                    products = [
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                      Product(
-                          'el_lipstick_red',
-                          'assets/el_lipstick_red.jpg',
-                          'Estee Lauder Lipstick Red',
-                          'A Red Lipstick from Estee Lauder',
-                          'Estee Lauder',
-                          'lipstick',
-                          30.00),
-                    ];
+                    products = _productData.getProducts();
                   });
                 },
                 child: Text(timelines[2],
@@ -342,9 +310,9 @@ class _MainPageState extends State<MainPage>
                     SliverToBoxAdapter(
                       child: appBar,
                     ),
-                    SliverToBoxAdapter(
-                      child: topHeader,
-                    ),
+                    // SliverToBoxAdapter(
+                    //   child: topHeader,
+                    // ),
                     SliverToBoxAdapter(
                       child: ProductList(
                         products: products,
@@ -360,7 +328,7 @@ class _MainPageState extends State<MainPage>
                 ),
               ),
             ),
-            CategoryListPage(),
+            // CategoryListPage(),
             CheckOutPage(),
             ProfilePage()
           ],

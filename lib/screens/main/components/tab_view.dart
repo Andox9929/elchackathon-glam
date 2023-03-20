@@ -60,20 +60,20 @@ class TabView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
-                    margin: EdgeInsets.all(8.0),
-                    height: MediaQuery.of(context).size.height / 9,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (_, index) => CategoryCard(
-                              category: categories[index],
-                            ))),
-                SizedBox(
-                  height: 16.0,
-                ),
-                Flexible(child: RecommendedList()),
+                // Container(
+                //     margin: EdgeInsets.all(8.0),
+                //     height: MediaQuery.of(context).size.height / 9,
+                //     width: MediaQuery.of(context).size.width,
+                //     child: ListView.builder(
+                //         scrollDirection: Axis.horizontal,
+                //         itemCount: categories.length,
+                //         itemBuilder: (_, index) => CategoryCard(
+                //               category: categories[index],
+                //             ))),
+                // SizedBox(
+                //   height: 16.0,
+                // ),
+                // Flexible(child: RecommendedList()),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/data/product_data.dart';
@@ -14,10 +15,27 @@ class CheckOutPage extends StatefulWidget {
   _CheckOutPageState createState() => _CheckOutPageState();
 }
 
-class _CheckOutPageState extends State<CheckOutPage> {
+class _CheckOutPageState extends State<CheckOutPage> with RouteAware {
   SwiperController swiperController = SwiperController();
 
-  List<Product> products = getProducts();
+  List<Product> products = [
+    getProduct("DO2"),
+  ];
+
+  @override
+  void didPush() {
+    setVisuals('checkout');
+  }
+
+  @override
+  void didPop() {
+    setVisuals('view_product');
+  }
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +118,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 300,
+                  height: 500,
                   child: Scrollbar(
                     child: ListView.builder(
                       itemBuilder: (_, index) => ShopItemList(
@@ -115,30 +133,30 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Payment',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: darkGrey,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 250,
-                  child: Swiper(
-                    itemCount: 2,
-                    itemBuilder: (_, index) {
-                      return CreditCard();
-                    },
-                    scale: 0.8,
-                    controller: swiperController,
-                    viewportFraction: 0.6,
-                    loop: false,
-                    fade: 0.7,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child: Text(
+                //     'Payment',
+                //     style: TextStyle(
+                //         fontSize: 20,
+                //         color: darkGrey,
+                //         fontWeight: FontWeight.bold),
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 250,
+                //   child: Swiper(
+                //     itemCount: 2,
+                //     itemBuilder: (_, index) {
+                //       return CreditCard();
+                //     },
+                //     scale: 0.8,
+                //     controller: swiperController,
+                //     viewportFraction: 0.6,
+                //     loop: false,
+                //     fade: 0.7,
+                //   ),
+                // ),
                 SizedBox(height: 24),
                 Center(
                     child: Padding(

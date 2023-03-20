@@ -137,6 +137,7 @@ class PromoItem extends StatelessWidget {
                   'A Red Lipstick from Estee Lauder',
                   'Estee Lauder',
                   'lipstick',
+                  ['lipstick', 'red'],
                   30.00),
               onPressed: () {},
             ),

@@ -1,50 +1,103 @@
 import 'package:ecommerce_int2/models/product.dart';
+import 'package:flutter/material.dart';
 
 List<Product> getProducts() {
   return [
     Product(
-      'el_lipstick_red',
-      'assets/el_lipstick_red.jpg',
-      'Estee Lauder Red Lipstick',
-      'A Red Lipstick from Estee Lauder',
-      'Estee Lauder',
+      'SL1',
+      'assets/products/sl1.svg',
+      'VELVET CREAM LIQUID LIPSTICK',
+      'ULTRA PIGMENTED CREAMY MATTE LIP STAIN',
+      'Saint Laurent',
       'lipstick',
-      30.00,
+      ['lipstick', 'red', 'pigment matte'],
+      155.00,
     ),
     Product(
-      'el_lipstick_pink',
-      'assets/el_lipstick_pink.jpg',
-      'Estee Lauder Pink Lipstick',
-      'A Pink Lipstick from Estee Lauder',
-      'Estee Lauder',
+      'CH1',
+      'assets/products/ch1.svg',
+      'Retro Matte',
+      'A vibrant and luminous lipstick. An ultra-fine, melt-away and second-skin texture',
+      'Chanel',
       'lipstick',
-      30.00,
+      ['lipstick', 'red', 'pigment matte'],
+      170.00,
     ),
     Product(
-      'loreal_lipstick_red',
-      'assets/loreal_lipstick_red.jpg',
-      'Color Riche Lipstick Matte Red',
-      'Indulge in a smooth, long-lasting formula. with 29 shades of matte lipsticks from color riche now in a new packaging.',
-      "L'Oréal",
+      'DO1',
+      'assets/products/do1.svg',
+      'DIOR ADDICT',
+      'Hydrating shine lipstick, 90% natural-origin ingredients',
+      "Dior",
       'lipstick',
-      15.00,
+      ['lipstick', 'red', 'pigment'],
+      130.00,
     ),
     Product(
-      'loreal_lipstick_cherry',
-      'assets/loreal_lipstick_cherry.jpg',
-      'Color Riche Lipstick Matte Cherry',
-      'Indulge in a smooth, long-lasting formula. with 29 shades of matte lipsticks from color riche now in a new packaging.',
-      "L'Oréal",
+      'MC1',
+      'assets/products/mc1.svg',
+      'MAC Lustre Glass Lipstick',
+      'MAC’s Lustre Glass Lipstick features a glossy finish, imparting ultra-wearable, sheer and buildable color.',
+      "MAC",
       'lipstick',
-      15.00,
+      ['lipstick', 'purple', 'pigment'],
+      180.00,
+    ),
+    Product(
+      'MB1',
+      'assets/products/mb1.svg',
+      'Maybelline Super Stay',
+      'A weightless moisture-matte lipstick that delivers a blur of soft-focus color.',
+      "Maybelline",
+      'lipstick',
+      ['lipstick', 'purple', 'pigment'],
+      80.00,
+    ),
+    Product(
+      'DO2',
+      'assets/products/do2.svg',
+      'DIOR Poison',
+      'A weightless, long-lasting liquid blush that blends and builds beautifully for a soft, healthy flush.',
+      "Dior",
+      'lipstick',
+      ['lipstick', 'purple', 'pigment'],
+      160.00,
     ),
   ];
+}
+
+Product getProduct(String id) {
+  List<Product> products = getProducts();
+  return products.where((element) => element.id == id).first;
 }
 
 List<Product> getProductsByCategory(String category) {
   List<Product> products = getProducts();
   products = products.where((element) => element.category == category).toList();
   return products;
+}
+
+List<Product> getProductsByKeywords(String str) {
+  List<Product> products = getProducts();
+  List<String> keywords = str.split(" ");
+
+  List<Product> matchedProducts = [];
+
+  for (var product in products) {
+    bool allTagsMatch = true;
+
+    for (var keyword in keywords) {
+      if (!product.keywords.contains(keyword)) {
+        allTagsMatch = false;
+        break;
+      }
+    }
+
+    if (allTagsMatch) {
+      matchedProducts.add(product);
+    }
+  }
+  return matchedProducts;
 }
 
 List<Product> getProductsByBrand(String brand) {

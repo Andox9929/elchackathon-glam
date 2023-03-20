@@ -40,10 +40,12 @@ class _ShopItemListState extends State<ShopItemList> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(top: 12.0, right: 12.0),
+                        padding:
+                            EdgeInsets.only(top: 12.0, left: 90, bottom: 10.0),
                         width: 200,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Text(
                               widget.product.name,
@@ -54,47 +56,35 @@ class _ShopItemListState extends State<ShopItemList> {
                                 color: darkGrey,
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: 160,
-                                padding: const EdgeInsets.only(
-                                    left: 32.0, top: 8.0, bottom: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    ColorOption(Colors.red),
-                                    Text(
-                                      '\$${widget.product.price}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: darkGrey,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
+                            Text(
+                              'RM ${widget.product.price.toStringAsFixed(2)}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: darkGrey,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0),
+                            ),
                           ],
                         ),
                       ),
-                      Theme(
+                      Container(
+                        width: 50,
+                        child: Theme(
                           data: ThemeData(
-                              accentColor: Colors.black,
                               textTheme: TextTheme(
-                                headline6: TextStyle(
+                                titleLarge: TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold),
-                                bodyText1: TextStyle(
+                                bodyLarge: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 12,
                                   color: Colors.grey[400],
                                 ),
-                              )),
+                              ),
+                              colorScheme: ColorScheme.fromSwatch()
+                                  .copyWith(secondary: Colors.black)),
                           child: NumberPicker(
                             value: quantity,
                             minValue: 1,
@@ -104,7 +94,9 @@ class _ShopItemListState extends State<ShopItemList> {
                                 quantity = value;
                               });
                             },
-                          ))
+                          ),
+                        ),
+                      )
                     ])),
           ),
           Positioned(
