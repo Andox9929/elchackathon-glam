@@ -97,6 +97,10 @@ const PRODUCT_IDS = [
     "DO2",
 ].join('|');
 
+const PRODUCT_NAMES = [
+    "Dior Poison"
+].join("|");
+
 // Screen
 const mainScreen = visual(state => state.screen === "main");
 const searchScreen = visual(state => state.screen === "search");
@@ -116,6 +120,10 @@ function isScreen(screen) {
 //         p.play(`Here is your search result of ${p.PRODUCT.value}.`);
 //     }
 // )
+
+intent(`Get Started`, p => {
+    p.play({command: 'getStarted'});
+});
 
 intent(`(Open|Go to) cart`, p => {
     p.play({command: 'navigation', route: '/cart'});
@@ -139,7 +147,7 @@ intent(`(Open|Go to|Back to) (home|homepage|main page)`, p => {
 });
 
 intent(
-    `Search for $(P ${KEYWORD_COMBINATIONS})`,
+    `Search (for|) $(P ${KEYWORD_COMBINATIONS})`,
     p => {
         p.play({
             command:'navigation', 
@@ -151,7 +159,7 @@ intent(
 );
 
 intent(
-    `(I want to|) (See|Check) $(P ${PRODUCT_IDS})`,
+    `(I want to|) (See|Check|View) $(P ${PRODUCT_NAMES})`,
     p => {
         p.play({
             command:'navigation', 
@@ -163,13 +171,13 @@ intent(
 );
 
 intent(
-    isScreen('view_product'),
     `Add (this product|) to cart`,
     p => {
         p.play({
             command:'addToCart',
         });
-        p.play(`Added to cart. Do you want to proceed to checkout page or continue shopping?`);
+//         p.play(`Added to cart. Do you want to proceed to checkout page or continue shopping?`);
+        p.play(`Successfully added to cart.`);
     }
 )
 
@@ -185,8 +193,7 @@ intent(
 )
 
 intent(
-    isScreen('checkout'),
-    `(Continue|) checkout`,
+    `(Continue|) (checkout|check out)`,
     p => {
         p.play({
             command: 'navigation',
